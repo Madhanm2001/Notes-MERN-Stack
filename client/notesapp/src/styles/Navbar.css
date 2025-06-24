@@ -1,0 +1,54 @@
+body{
+    overflow-x: hidden;
+    background-color: black;
+}
+
+#navbarWrap{
+    position: sticky;
+    top: 0;
+}
+
+#Applogo{
+    height: 50px;
+    width: 50px;
+    backdrop-filter:inherit;
+    cursor: pointer;
+}
+
+#Homelogo{
+    height: 50px;
+    width: 50px;
+    backdrop-filter:inherit;
+    cursor: pointer;
+}
+
+
+/* #ProfileList{
+    position: absolute;
+    top: 100%;
+    right:2%;
+    color: black;
+    padding: 10px 25px;
+    background-color:antiquewhite;
+} */
+
+#Profilelogo{
+    height: 55px;
+    width: 55px;
+    backdrop-filter:inherit;
+    border-radius: 100px;
+    cursor: pointer;
+}
+
+#Profilelogo,#Navbar li{
+    list-style:none;
+}
+
+#Navbar{
+    display: flex;
+    justify-content:space-between;
+    border-bottom: 2px solid  grey;
+    padding: 10px 10px 0 10px;
+    background-color: black;
+    height: 70px;
+}

@@ -1,0 +1,8 @@
+node_modules/
+
+.env
+
+*.log     # Ignores all .log files
+
+dist/     # Ignores the entire dist folder
+

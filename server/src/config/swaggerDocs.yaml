@@ -1,0 +1,1439 @@
+openapi: 3.0.0
+info:
+  title: Notes App API
+  version: 1.0.0
+  description: API documentation for Notes App
+
+servers:
+  - url: http://localhost:5000/api
+    description: Local server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Authorization header using the Bearer scheme.
+
+  responses:
+    InvalidArguments:
+      description: Invalid arguments response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              displayMessage:
+                type: string
+                example: "Invalid arguments"
+              statusCode:
+                type: integer
+                example: 400
+              status:
+                type: string
+                example: "failed"
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              displayMessage:
+                type: string
+                example: "Internal server error"
+              statusCode:
+                type: integer
+                example: 500
+              status:
+                type: string
+                example: "failed"
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Auth
+    description: Authentication and authorization endpoints
+  - name: Profile
+    description: Profile management endpoints
+  - name: Folder
+    description: Endpoints for managing folders    
+  - name: Notes
+    description: Endpoints for managing notes
+  
+
+paths:
+
+  /sign-up:
+    post:
+      summary: User Registration
+      description: Registers a new user with username, password, email, phone number, and name.
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+                - confirmPassword
+                - phoneNumber
+                - email
+                - name
+              properties:
+                username:
+                  type: string
+                  example: johndoe
+                password:
+                  type: string
+                  example: MySecurePassword123
+                confirmPassword:
+                  type: string
+                  example: MySecurePassword123
+                phoneNumber:
+                  type: string
+                  example: "+919876543210"
+                email:
+                  type: string
+                  format: email
+                  example: johndoe@example.com
+                name:
+                  type: string
+                  example: John Doe
+      responses:
+        '201':
+          description: User registered successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User registered successfully.
+        '400':
+          description: Bad Request - Missing fields, password mismatch, or user already exists.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All fields are required.
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+  
+  /sign-in:
+    post:
+      summary: User Login
+      description: Logs in a user using username or email and password.
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - usernameoremail
+                - password
+              properties:
+                usernameoremail:
+                  type: string
+                  description: Username or Email of the user
+                  example: johndoe@example.com
+                password:
+                  type: string
+                  description: Password of the user
+                  example: MySecurePassword123
+      responses:
+        '200':
+          description: Successful login, returns JWT token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '400':
+          description: Invalid input or login failure.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid username or email.
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+  
+  /profile:
+    get:
+      summary: Get User Profile
+      description: Retrieves the authenticated user's profile using JWT authentication.
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Successfully retrieved user profile.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  profile:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        example: johndoe
+                      name:
+                        type: string
+                        example: John Doe
+                      phoneNumber:
+                        type: string
+                        example: "+919876543210"
+                      email:
+                        type: string
+                        example: johndoe@example.com
+        '400':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: user is not found by this Id.
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+  
+  /profile/update:
+    patch:
+      summary: Update User Profile
+      description: Updates the authenticated user's profile information. Requires JWT authentication.
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - phoneNumber
+                - email
+                - name
+              properties:
+                username:
+                  type: string
+                  example: johndoe123
+                phoneNumber:
+                  type: string
+                  example: "+919999999999"
+                email:
+                  type: string
+                  format: email
+                  example: johndoe@example.com
+                name:
+                  type: string
+                  example: John Doe
+      responses:
+        '201':
+          description: Profile updated successfully.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Profile Data is Updated.
+        '400':
+          description: Missing data or profile not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: enter all the required data.
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /profile/change-password:
+    patch:
+      summary: Change User Password
+      description: Allows the authenticated user to change their password by providing the old and new passwords.
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - oldPassword
+                - newPassword
+              properties:
+                oldPassword:
+                  type: string
+                  description: Current password
+                  example: OldPassword123
+                newPassword:
+                  type: string
+                  description: New password (must be different from old)
+                  example: NewSecurePassword456
+      responses:
+        '201':
+          description: Password changed successfully.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: password is changed successfully
+        '400':
+          description: Invalid input or password mismatch.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: enter valid old password
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /folder:
+    post:
+      summary: Create a Folder
+      description: Creates a new folder for the authenticated user. Requires JWT authentication.
+      tags:
+        - Folder
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - category
+              properties:
+                name:
+                  type: string
+                  example: Project Notes
+                category:
+                  type: string
+                  example: Work
+      responses:
+        '201':
+          description: Folder created successfully.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: folder is created successfully
+        '400':
+          description: Missing folder name or category.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: enter folder name and category
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+    get:
+      summary: Get Folders
+      description: Retrieves folders for the authenticated user with optional filters for category, sorting, and pagination.
+      tags:
+        - Folder
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+          required: false
+          description: Filter folders by category
+          example: Work
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [atoz, ztoa, newtoold, oldtonew]
+          required: false
+          description: Sort folders by name or date
+          example: atoz
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          required: false
+          description: Page number for pagination
+          example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+          required: false
+          description: Number of folders per page
+          example: 10
+      responses:
+        '201':
+          description: Folders retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  folders:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: Project Notes
+                        folderId:
+                          type: string
+                          example: 123e4567-e89b-12d3-a456-426614174000
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          example: 2025-06-12T08:35:00.000Z
+                  totalFolders:
+                    type: integer
+                    example: 5
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /folder/{folderId}:
+    get:
+      summary: Get Folder by ID
+      description: Retrieves a specific folder by its folderId for the authenticated user.
+      tags:
+        - Folder
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+            type: string
+          description: The unique ID of the folder
+          example: 123e4567-e89b-12d3-a456-426614174000
+      responses:
+        '200':
+          description: Folder retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: My Folder
+                  folderId:
+                    type: string
+                    example: 123e4567-e89b-12d3-a456-426614174000
+                  category:
+                    type: string
+                    example: Work
+                  isDeleted:
+                    type: boolean
+                    example: false
+                  userId:
+                    type: string
+                    example: user-123
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: 2025-06-12T08:35:00.000Z
+        '400':
+          description: Folder not found.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: folder not found
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+    put:
+      summary: Update Folder
+      description: Updates the name and category of an existing folder for the authenticated user.
+      tags:
+        - Folder
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+            type: string
+          description: The ID of the folder to update
+          example: 123e4567-e89b-12d3-a456-426614174000
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - category
+              properties:
+                name:
+                  type: string
+                  example: Updated Folder Name
+                category:
+                  type: string
+                  example: Personal
+      responses:
+        '200':
+          description: Folder updated successfully.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: folder is updated
+        '400':
+          description: Folder not found or invalid input.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: both note name and category are required
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+    delete:
+      summary: Delete Folder
+      description: Soft deletes a folder and all its associated notes for the authenticated user.
+      tags:
+        - Folder
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+            type: string
+          description: The ID of the folder to delete
+          example: 123e4567-e89b-12d3-a456-426614174000
+      responses:
+        '200':
+          description: Folder deleted successfully.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: folder is deleted
+        '400':
+          description: Folder not found.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: folder not found
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /folder/search:
+    get:
+      summary: Search Folders by Name
+      description: Searches folders by name using a case-insensitive partial match for the authenticated user.
+      tags:
+        - Folder
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: string
+          description: The folder name to search for (partial or full)
+          example: work
+      responses:
+        '200':
+          description: Matching folders returned successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Work Documents
+                    folderId:
+                      type: string
+                      example: 123e4567-e89b-12d3-a456-426614174000
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      example: 2025-06-12T09:00:00.000Z
+        '400':
+          description: Query parameter `name` is missing or folders not found.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: name required
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /folder/categories:
+    get:
+      summary: Get Unique Folder Categories
+      description: Retrieves all unique folder categories for the authenticated user.
+      tags:
+        - Folder
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: List of unique categories retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example: ["Personal", "Work", "Study"]
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /note/create/{folderId}:
+    put:
+      summary: Create a Note
+      description: Creates a note inside the specified folder for the authenticated user.
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+            type: string
+          description: The ID of the folder where the note will be created
+          example: 123e4567-e89b-12d3-a456-426614174000
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - content
+              properties:
+                name:
+                  type: string
+                  example: Meeting Notes
+                content:
+                  type: string
+                  example: Discussed quarterly goals and marketing strategies.
+      responses:
+        '201':
+          description: Note created successfully.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: note is created successfully
+        '400':
+          description: Missing name, content, or folderId.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: both note name and content are required
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /note/getAll/{folderId}:
+    get:
+      summary: Get All Notes in a Folder
+      description: Retrieves all notes for a specific folder, with optional filters, sorting, and pagination.
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+            type: string
+          description: ID of the folder to fetch notes from
+          example: 123e4567-e89b-12d3-a456-426614174000
+
+        - in: query
+          name: filter
+          schema:
+            type: string
+            enum: [archived, active]
+          description: Filter notes by archived or active status
+
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [atoz, ztoa, newtoold, oldtonew]
+          description: Sort notes by name or date
+
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number for pagination
+          example: 1
+
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Number of notes per page
+          example: 10
+
+      responses:
+        '200':
+          description: Notes retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: My Note Title
+                        noteId:
+                          type: string
+                          example: 987f4567-a89b-12d3-a456-426614178abc
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          example: 2025-06-12T10:00:00Z
+                        isPinned:
+                          type: boolean
+                          example: true
+                  totalNotes:
+                    type: integer
+                    example: 42
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /note:
+    get:
+      summary: Get All Notes (Across All Folders)
+      description: Retrieve all notes created by the authenticated user with optional filtering, sorting, and pagination.
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: filter
+          schema:
+            type: string
+            enum: [archived, active]
+          description: Filter notes by archived or active status
+
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [atoz, ztoa, newtoold, oldtonew]
+          description: Sort notes by name or update date
+
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number for pagination
+          example: 1
+
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Number of notes per page
+          example: 10
+
+      responses:
+        '200':
+          description: Notes retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: Shopping List
+                        noteId:
+                          type: string
+                          example: d5acbd9a-a38b-4b98-8dfc-4d2eac0d8d7b
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          example: 2025-06-12T13:45:00Z
+                        isPinned:
+                          type: boolean
+                          example: false
+                  totalNotes:
+                    type: integer
+                    example: 25
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /note/get/{noteId}:
+    get:
+      summary: Get a Single Note
+      description: Retrieve the details of a specific note by its `noteId` for the authenticated user.
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: noteId
+          required: true
+          schema:
+            type: string
+          description: The unique ID of the note to retrieve
+          example: abcd-1234-5678-efgh
+
+      responses:
+        '200':
+          description: Note retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  noteId:
+                    type: string
+                    example: abcd-1234-5678-efgh
+                  name:
+                    type: string
+                    example: Grocery List
+                  content:
+                    type: string
+                    example: Buy milk, eggs, and bread
+                  folderId:
+                    type: string
+                    example: fldr-7890
+                  isPinned:
+                    type: boolean
+                    example: false
+                  isArchived:
+                    type: boolean
+                    example: false
+                  isDeleted:
+                    type: boolean
+                    example: false
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: 2025-06-12T14:00:00Z
+        '400':
+          description: Note not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: note not found
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /note/update/{noteId}:
+    put:
+      summary: Update a Note
+      description: Updates the name and content of a note for the authenticated user.
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: noteId
+          required: true
+          schema:
+            type: string
+          description: The unique ID of the note to update
+          example: abcd-1234-5678-efgh
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - content
+              properties:
+                name:
+                  type: string
+                  example: Updated Shopping List
+                content:
+                  type: string
+                  example: Buy almond milk, eggs, bananas
+
+      responses:
+        '200':
+          description: Note is updated successfully
+          content:
+            application/json:
+              schema:
+                type: string
+                example: note is updated
+        '400':
+          description: Bad Request – missing fields or note not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: both name and content are required
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /note/archived/{noteId}:
+    put:
+      summary: Archive a Note
+      description: Archives a note by setting `isArchived` to true for the authenticated user.
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: noteId
+          required: true
+          schema:
+            type: string
+          description: The unique ID of the note to archive
+          example: abcd-1234-5678-efgh
+
+      responses:
+        '200':
+          description: Note archived successfully
+          content:
+            application/json:
+              schema:
+                type: string
+                example: note is archived successfully
+        '400':
+          description: Note not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: note not found
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /note/unarchived/{noteId}:
+    put:
+      summary: Unarchive a Note
+      description: Sets `isArchived` to false for the specified note belonging to the authenticated user.
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: noteId
+          required: true
+          schema:
+            type: string
+          description: The unique ID of the note to unarchive
+          example: abcd-1234-5678-efgh
+
+      responses:
+        '200':
+          description: Note unarchived successfully
+          content:
+            application/json:
+              schema:
+                type: string
+                example: note is unarchived successfully
+        '400':
+          description: Note not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: note not found
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /note/pinned/{noteId}:
+    put:
+      summary: Pin a Note
+      description: Sets `isPinned` to true for the specified note belonging to the authenticated user.
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: noteId
+          required: true
+          schema:
+            type: string
+          description: The unique ID of the note to pin
+          example: abcd-1234-5678-efgh
+
+      responses:
+        '200':
+          description: Note pinned successfully
+          content:
+            application/json:
+              schema:
+                type: string
+                example: note is Pinned successfully
+        '400':
+          description: Note not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: note not found
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /note/unpinned/{noteId}:
+    put:
+      summary: Unpin a Note
+      description: Sets `isPinned` to false for the specified note belonging to the authenticated user.
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: noteId
+          required: true
+          schema:
+            type: string
+          description: The unique ID of the note to unpin
+          example: abcd-1234-5678-efgh
+
+      responses:
+        '200':
+          description: Note unpinned successfully
+          content:
+            application/json:
+              schema:
+                type: string
+                example: note is unpinned successfully
+        '400':
+          description: Note not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: note not found
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /note/{noteId}:
+    delete:
+      summary: Soft delete a note
+      description: "Marks the specified note as deleted (`isDeleted: true`) for the authenticated user."
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: noteId
+          required: true
+          schema:
+            type: string
+          description: The unique ID of the note to delete
+          example: note-1234-abcd
+
+      responses:
+        '200':
+          description: Note deleted successfully
+          content:
+            application/json:
+              schema:
+                type: string
+                example: note is deleted
+        '400':
+          description: Note not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: note not found
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+  /note/search/{folderId}:
+    get:
+      summary: Search notes by name in a specific folder
+      description: Search notes by partial or full name within a specified folder (case-insensitive), only for the authenticated user.
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+            type: string
+          description: The ID of the folder to search notes within
+          example: folder-1234
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: string
+          description: Partial or full name of the note to search for
+          example: meeting
+
+      responses:
+        '200':
+          description: Notes found matching the search term
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Meeting Notes
+                    noteId:
+                      type: string
+                      example: note-5678
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      example: 2025-06-12T12:34:56.789Z
+        '400':
+          description: No notes found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: no more notes are not found based on this name
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

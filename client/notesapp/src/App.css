@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+body{
+
+    overflow-x: hidden;
+}
+
+@layer base{
+    h2{
+        font-weight: 700;
+        text-align: center;
+        padding: 5%;
+        font-size: large;
+    }
+}
