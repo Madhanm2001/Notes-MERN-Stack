@@ -6,10 +6,10 @@ const folderRouter = express.Router();
 
 folderRouter.post('/',authenticateJWT,createFolder);
 folderRouter.get('/',authenticateJWT,getFolders);
+folderRouter.get('/search',authenticateJWT,searchFolders);
+folderRouter.get('/categories',authenticateJWT,getCategories);
 folderRouter.get('/:folderId',authenticateJWT,getFolder);
 folderRouter.put('/:folderId',authenticateJWT,updateFolder);
 folderRouter.delete('/:folderId',authenticateJWT,deleteFolder);
-folderRouter.get('/search',authenticateJWT,searchFolders);
-folderRouter.get('/categories',authenticateJWT,getCategories);
 
 export default folderRouter;

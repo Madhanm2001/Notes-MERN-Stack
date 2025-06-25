@@ -13,7 +13,7 @@ const FolderSchema: Schema = new Schema<FolderModel>({
   userId: { type: String, required: true},
   folderId: { type: String, required: true, unique: true},
   isDeleted: { type: Boolean, required: true},
-  category: { type: String, required: true}
+  category: { type: String}
 },{timestamps:true});
 
 export default mongoose.model<FolderModel>('Folder', FolderSchema);

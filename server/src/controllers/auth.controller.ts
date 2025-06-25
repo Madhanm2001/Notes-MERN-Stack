@@ -19,6 +19,13 @@ export const signUp: any = async (req: Request, res: Response) => {
     const emailId=await AuthModel.findOne({ email: email });
     const userName=await AuthModel.findOne({ username: username });
 
+    // const user = await AuthModel.findOne({
+    //   $or: [
+    //     { username: usernameoremail },
+    //     { email: usernameoremail }
+    //   ]
+    // });
+
     if (userName) {
       return res.status(400).json({ message: 'User with the same username already exists.' });
     }

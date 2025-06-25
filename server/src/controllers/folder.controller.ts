@@ -9,8 +9,8 @@ export const createFolder: any = async (req: Request, res: Response): Promise<vo
         const { name, category } = req.body
         const decode = (req as any).user;
 
-        if (!name || !category) {
-            return res.status(400).json('enter folder name and category')
+        if (!name) {
+            return res.status(400).json('enter folder name')
         }
 
         const data = {
@@ -61,13 +61,13 @@ export const getFolders: any = async (req: Request, res: Response) => {
                 sortOption = { name: -1 };
                 break;
             case 'newtoold':
-                sortOption = { name: -1 };
+                sortOption = { updatedAt: -1 };
                 break;
             case 'oldtonew':
-                sortOption = { name: 1 };
+                sortOption = { updatedAt: 1 };
                 break;
             default:
-                sortOption = { name: -1 };
+                sortOption = { updatedAt: -1 };
 
         }
 
@@ -105,7 +105,7 @@ export const getCategories: any = async (req: Request, res: Response) => {
         const { folderId } = req.params
         const decode = (req as any).user;
 
-        const uniqueCategories = await folderModel.distinct('category', { folderId,userId:decode.userId,isDeleted: false });
+        const uniqueCategories = await folderModel.distinct('category', {userId:decode.userId,isDeleted: false });
 
         return res.status(201).json(uniqueCategories);
 
