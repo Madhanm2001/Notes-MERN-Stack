@@ -220,7 +220,7 @@ export const searchNotes: any = async (req: Request, res: Response) => {
 
         const notes = await noteModel.find({
             name: { $regex: name, $options: 'i' },
-            folderId: { $regex: "^" + folderId, $options: 'i' },
+            folderId,
             userId: decode.userId
         }).select('name noteId updatedAt -_id')
 

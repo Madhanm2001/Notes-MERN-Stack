@@ -16,7 +16,7 @@ export const createFolder: any = async (req: Request, res: Response): Promise<vo
         const data = {
             name,
             folderId: generateUUID(),
-            category,
+            category:category?category:null,
             isDeleted: false,
             userId: decode.userId
         }
@@ -102,10 +102,9 @@ export const getFolders: any = async (req: Request, res: Response) => {
 export const getCategories: any = async (req: Request, res: Response) => {
 
     try {
-        const { folderId } = req.params
         const decode = (req as any).user;
 
-        const uniqueCategories = await folderModel.distinct('category', {userId:decode.userId,isDeleted: false });
+        const uniqueCategories = await folderModel.distinct('category',{userId:decode.userId,isDeleted: false,category:{ $ne: null }});
 
         return res.status(201).json(uniqueCategories);
 
@@ -145,11 +144,11 @@ export const updateFolder: any = async (req: Request, res: Response) => {
         const { folderId } = req.params
         const decode = (req as any).user;
 
-        if(!name || !category){
-            return res.status(400).json('both note name and category are required')
+        if(!name){
+            return res.status(400).json('folder name is required')
         }
 
-        const folder = await folderModel.findOneAndUpdate({ folderId, isDeleted: false,userId:decode.userId }, { name, category });
+        const folder = await folderModel.findOneAndUpdate({ folderId, isDeleted: false,userId:decode.userId}, { name,category:category?category:null });
 
         console.log(folder);
 

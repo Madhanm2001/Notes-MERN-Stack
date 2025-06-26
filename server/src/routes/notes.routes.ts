@@ -4,9 +4,9 @@ import { authenticateJWT } from '../middlewares/auth.middleware';
 
 const notesRouter = express.Router();
 
+notesRouter.get('/',authenticateJWT,getAllNotes);
 notesRouter.put('/create/:folderId',authenticateJWT,createNote);
 notesRouter.get('/getAll/:folderId',authenticateJWT,getNotes);
-notesRouter.get('/',authenticateJWT,getAllNotes);
 notesRouter.get('/get/:noteId',authenticateJWT,getNote);
 notesRouter.put('/update/:noteId',authenticateJWT,updateNote);
 notesRouter.put('/archived/:noteId',authenticateJWT,noteArchived);

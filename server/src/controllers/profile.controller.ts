@@ -10,7 +10,7 @@ export const getProfile: any = async (req: Request, res: Response) => {
         console.log(decode);
 
 
-        const Data = await AuthModel.findOne({userId:decode.userId});
+        const Data = await AuthModel.findOne({ userId: decode.userId });
 
         if (!Data) {
             return res.status(400).json({ message: 'user is not found by this Id.' });
@@ -40,7 +40,25 @@ export const updateProfile: any = async (req: Request, res: Response) => {
 
         const decode = (req as any).user;
 
-        const Data = await AuthModel.findOneAndUpdate({userId:decode.userId}, req.body, { new: true });
+        const existingUser = await AuthModel.findOne({userId:!decode.userId,
+            $or: [
+                { username },
+                { email }
+            ]
+        });
+
+        if (existingUser) {
+
+            if (username == existingUser.username) {
+                return res.status(400).json({ message: 'User with the same username already exists.' });
+            }
+            else {
+                return res.status(400).json({ message: 'User with the same email already exists.' });
+            }
+
+        }
+
+        const Data = await AuthModel.findOneAndUpdate({ userId: decode.userId }, req.body, { new: true });
 
         if (!Data) {
             return res.status(400).json({ message: 'Profile is not found by this Id.' });
@@ -52,7 +70,7 @@ export const updateProfile: any = async (req: Request, res: Response) => {
 
     catch (error) {
 
-     res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error' });
 
     }
 };
@@ -74,36 +92,36 @@ export const changePassword: any = async (req: Request, res: Response) => {
             return res.status(400).json('new password is must be different')
 
         }
-        const current=await AuthModel.findOne({userId:decode.userId})
+        const current = await AuthModel.findOne({ userId: decode.userId })
 
-        console.log(current,"hashjahsj");
+        console.log(current, "hashjahsj");
 
-        if(!current){
+        if (!current) {
 
             return res.status(400).json('user is Invalid')
 
         }
 
-        const isMatch = await bcrypt.compare(oldPassword,current.password);
-        const newHashedPassword=await bcrypt.hash(newPassword,10);
+        const isMatch = await bcrypt.compare(oldPassword, current.password);
+        const newHashedPassword = await bcrypt.hash(newPassword, 10);
 
-        console.log(isMatch,"isMatch");
-        
-        if(!isMatch){
+        console.log(isMatch, "isMatch");
+
+        if (!isMatch) {
 
             return res.status(400).json('enter valid old password')
 
         }
 
-        const UpdatedProfile={
-            username:current.username,
-            password:newHashedPassword,
-            userId:current.userId,
-            name:current.name,
-            phoneNumber:current.phoneNumber
+        const UpdatedProfile = {
+            username: current.username,
+            password: newHashedPassword,
+            userId: current.userId,
+            name: current.name,
+            phoneNumber: current.phoneNumber
         }
 
-        await AuthModel.findOneAndUpdate({userId:decode.userId},UpdatedProfile)
+        await AuthModel.findOneAndUpdate({ userId: decode.userId }, UpdatedProfile)
 
         return res.status(201).json("password is changed successfully")
 
@@ -111,7 +129,7 @@ export const changePassword: any = async (req: Request, res: Response) => {
 
     catch (error) {
 
-    res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error' });
 
     }
 };

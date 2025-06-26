@@ -16,23 +16,23 @@ export const signUp: any = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Passwords do not match.' });
     }
 
-    const emailId=await AuthModel.findOne({ email: email });
-    const userName=await AuthModel.findOne({ username: username });
+    const existingUser = await AuthModel.findOne({
+      $or: [
+        { username },
+        { email }
+      ]
+    });
 
-    // const user = await AuthModel.findOne({
-    //   $or: [
-    //     { username: usernameoremail },
-    //     { email: usernameoremail }
-    //   ]
-    // });
+ if(existingUser){
 
-    if (userName) {
+    if (username==existingUser.username){
       return res.status(400).json({ message: 'User with the same username already exists.' });
     }
-
-    if (emailId) {
+    else {
       return res.status(400).json({ message: 'User with the same email already exists.' });
     }
+
+  }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 

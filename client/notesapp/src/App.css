@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 
 body{
 
@@ -7,9 +11,45 @@ body{
 
 @layer base{
     h2{
-        font-weight: 700;
+        font-weight: 800;
         text-align: center;
         padding: 5%;
         font-size: large;
     }
 }
+
+@layer components{
+    .layoutPosition{
+       @apply w-full h-full fixed top-0 left-0;
+    }
+    .layoutBlur{
+        @apply bg-[rgba(107,107,107,0.5)] backdrop-blur-[0.5px] z-[1000];
+    }
+    .formContainer{
+        @apply bg-[black] sticky z-[1000] rounded-[10px] w-[80%] sm:w-[50%] md:w-[40%] lg:w-[30%]  px-[min(300px,5%)] py-[min(3%,2%)] mx-auto
+    }
+    .closeIcon{
+        @apply ms-auto h-[35px] w-[35px] rounded-[100px]
+    }
+    .layoutHeader{
+        @apply text-[#c8c0c0] text-[20px]
+    }
+    .layoutField{
+        @apply flex flex-col mt-[5vh]
+    }
+    .layoutLabel{
+        @apply text-white font-semibold
+    }
+    .layoutInput{
+        @apply border-[1px] rounded text-white px-[15px] py-[1%]
+    }
+    .layoutButtonDiv{
+       @apply flex justify-end gap-[20px]   
+    }
+    .button{
+        @apply bg-[#0052d9] text-white rounded border-none mt-[5vh] p-[5px_10px]
+    }
+
+}
+
+

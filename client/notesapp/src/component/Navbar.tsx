@@ -15,8 +15,6 @@ const activeRef: any= useRef(null)
 
 useEffect(()=>{
 
-  navigate('/')
-
   const onOverlayClick = (e:any) => {
       if (activeRef.current && !activeRef.current.contains(e.target)) {
         setIsProfileOpen(false);
@@ -44,7 +42,7 @@ useEffect(()=>{
     </li>
 
     <li>
-      <Link to="/all-notes" onClick={()=>setActivetab('notes')}>
+      <Link to="/notes" onClick={()=>setActivetab('notes')}>
         <img title='All-Notes' className={`h-[55px] w-[55px] ${
         activetab === 'notes'
           ? "shadow-[0px_0px_10px_2px_#989898] text-white bg-black rounded-[100px]"

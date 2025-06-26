@@ -4,6 +4,7 @@ import Folder from './component/folder.js'
 import Navbar  from './component/Navbar.js'
 import { BrowserRouter,Routes,Route} from 'react-router-dom'
 import Auth from './component/Auth.js'
+import FormModal from './common/FormModal.js'
 
 function App() {
   return (
@@ -12,8 +13,9 @@ function App() {
     <Navbar/>
     <Routes>
       <Route path='/' element={<Folder/>}/>
-      <Route path="/all-notes/:id?" element={<AllNotes />} />
+      <Route path="/notes/:id?" element={<AllNotes />} />
       <Route path='/auth' element={<Auth/>}/>
+      <Route path='/modal' element={<FormModal/>}/>
     </Routes>
     </BrowserRouter>
     </>
