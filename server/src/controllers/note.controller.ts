@@ -210,6 +210,33 @@ export const deleteNote: any = async (req: Request, res: Response) => {
 
 }
 
+export const searchAllNotes: any = async (req: Request, res: Response) => {
+
+    try {
+
+        const { name } = req.query
+        const decode = (req as any).user;
+
+        const notes = await noteModel.find({
+            name: { $regex: name, $options: 'i' },
+            userId: decode.userId
+        }).select('name noteId updatedAt -_id')
+
+        console.log(notes);
+
+
+        if (!notes) {
+            return res.status(400).json('no more notes are not found based on this name');
+        }
+
+        res.status(200).json(notes);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+
+}
+
 export const searchNotes: any = async (req: Request, res: Response) => {
 
     try {

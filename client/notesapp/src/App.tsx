@@ -5,6 +5,7 @@ import Navbar  from './component/Navbar.js'
 import { BrowserRouter,Routes,Route} from 'react-router-dom'
 import Auth from './component/Auth.js'
 import FormModal from './common/FormModal.js'
+import Profile from './component/Profile.js'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Route path="/notes/:id?" element={<AllNotes />} />
       <Route path='/auth' element={<Auth/>}/>
       <Route path='/modal' element={<FormModal/>}/>
+      <Route path='/profile' element={<Profile/>}/>
     </Routes>
     </BrowserRouter>
     </>

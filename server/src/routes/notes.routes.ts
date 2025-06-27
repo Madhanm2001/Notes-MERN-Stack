@@ -1,5 +1,5 @@
 import express from 'express';
-import { createNote,getNotes,getNote,updateNote,deleteNote,searchNotes,noteArchived,noteUnArchived,notePinned,noteUnpinned,getAllNotes } from '../controllers/note.controller';
+import { createNote,getNotes,getNote,updateNote,deleteNote,searchNotes,noteArchived,noteUnArchived,notePinned,noteUnpinned,getAllNotes, searchAllNotes } from '../controllers/note.controller';
 import { authenticateJWT } from '../middlewares/auth.middleware';
 
 const notesRouter = express.Router();
@@ -15,5 +15,7 @@ notesRouter.put('/pinned/:noteId',authenticateJWT,notePinned);
 notesRouter.put('/unpinned/:noteId',authenticateJWT,noteUnpinned);
 notesRouter.delete('/:noteId',authenticateJWT,deleteNote);
 notesRouter.get('/search/:folderId',authenticateJWT,searchNotes);
+notesRouter.get('/searchAll/:folderId',authenticateJWT,searchAllNotes);
+
 
 export default notesRouter;

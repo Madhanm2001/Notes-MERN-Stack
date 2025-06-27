@@ -84,7 +84,7 @@ useEffect(()=>{
           <li
             className="border-b-[2px] p-[5%]"
             onClick={() => {
-              navigate("/user-profile");
+              navigate("/profile");
               setIsProfileOpen(false);
             }}
           >

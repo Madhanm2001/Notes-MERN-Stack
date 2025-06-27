@@ -2,6 +2,7 @@ body{
     overflow-x: hidden;
     background-color: black;
     padding:0 10px ;
+    z-index: -100;
 }
 
 #folderlogo{
@@ -16,9 +17,9 @@ body{
 }
 
 #Addnotes{
-    height: 12vh;
-    width: 12vh;
-    margin-top: 25px;
+    height: 8vh;
+    width: 8vh;
+    margin: 25px 15px;
 }
 #noteslogo{
     height: 10vh;
