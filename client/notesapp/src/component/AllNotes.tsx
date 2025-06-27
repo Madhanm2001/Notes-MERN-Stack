@@ -16,7 +16,7 @@ import { faArrowDownShortWide, faArrowUpAZ, faArrowUpShortWide, faArrowUpZA } fr
 
 const AllNotes: React.FC = () => {
 
-  const folderList = ['workout routine workout routine workout routine workout routine workout routineworkout routine workout routine workout routine workout routine workout routineworkout routine workout routine workout routine workout routine workout routine', "workout routine", "workout routine", "workout routine", "workout routine", "workout routine", "workout routine"]
+  const folderList = [ "workout routine", "workout routine", "workout routine", "workout routine", "workout routine", "workout routine"]
   const sortOptions = ['A-Z', 'Z-A', 'old-new', 'new-old']
   return (
     <div>
@@ -39,7 +39,7 @@ const AllNotes: React.FC = () => {
       </div>
 
       <div className='flex flex-wrap justify-around max-[430px]:flex-col max-[430px]:items-center'>
-        <ul className='flex gap-[5%]'>
+        <ul className='flex justify-center gap-[10%]'>
           <li><FontAwesomeIcon icon={faArrowUpAZ} style={{ width: "20px", height: "20px" }} className='fa-sharp fa-solid fa-arrow-up-a-z bg-[#cdca00] p-2 rounded' /></li>
           <li><FontAwesomeIcon icon={faArrowUpZA} style={{ width: "20px", height: "20px" }} className="fa-solid fa-arrow-up-z-a bg-[#cdca00] p-2 rounded" /></li>
           <li><FontAwesomeIcon icon={faArrowDownShortWide} style={{ width: "20px", height: "20px" }} className="fa-solid fa-arrow-down-wide-short bg-[#cdca00] p-2 rounded" /></li>
