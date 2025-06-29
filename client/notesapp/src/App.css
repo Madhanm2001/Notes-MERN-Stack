@@ -25,13 +25,16 @@ body{
         @apply bg-[rgba(107,107,107,0.5)] backdrop-blur-[0.5px] z-[1000];
     }
     .formContainer{
-        @apply bg-[black] sticky z-[1000] rounded-[10px] w-[80%] sm:w-[50%] md:w-[40%] lg:w-[30%]  px-[min(300px,5%)] py-[min(3%,2%)] mx-auto
+        @apply bg-[black] sticky z-[1000] rounded-[10px] w-[80%] sm:w-[50%] md:w-[40%] lg:w-[30%]  px-[min(300px,5%)] py-[min(3%,10%)] mx-auto
+    }
+    .notesContainer{
+        @apply bg-[black] sticky z-[1000] rounded-[10px] w-[90%] sm:w-[60%] p-[3%] mx-auto
     }
     .closeIcon{
         @apply ms-auto h-[35px] w-[35px] rounded-[100px]
     }
     .layoutHeader{
-        @apply text-[#c8c0c0] text-[20px]
+        @apply text-[#c8c0c0] text-[25px]
     }
     .layoutField{
         @apply flex flex-col mt-[5vh]
@@ -54,6 +57,18 @@ body{
     .searchbarNotes{
         @apply h-[20px] w-[20px] absolute max-[398px]:left-[190px] max-[398px]:top-[55%] max-[640px]:left-[190px] max-[640px]:top-[35%] max-[693px]:top-[55%] max-[672px]:left-[460px] max-[782px]:top-[35%] max-[782px]:left-[470px] top-[30%] left-[470px] cursor-pointer
     }
+    .ProseMirror ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+}
+.ProseMirror ol {
+  list-style-type: decimal;
+  margin-left: 1.5rem;
+}
+.ProseMirror a {
+  text-decoration: underline;
+  color: #60a5fa; /* blue-400 */
+}
 
 }
 

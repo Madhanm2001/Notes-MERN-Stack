@@ -1,38 +1,31 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
+import TextEditor from './TextEditor'
 import closeLogo from '../images/closeLogo.png'
 
-const FormModal = () => {
-    const [show, setShow] = useState(false)
-    return (
+const FormModal = (props:any) => {
+  const [content, setContent] = useState('<p>Hello World!</p>')
+  const [show, setShow] = useState(false)
+
+  const handleSubmit = () => {
+    console.log('Submitting:', content)
+    // call your API here
+  }
+
+ return (
         <div>
             {show&&<div className={`layoutPosition
     ${show ? 'layoutBlur': 'z-[-1]'}`} onClick={()=>setShow(false)}></div>}
-            {show && <section className='formContainer'>
+            {show && <section className={`${1?'notesContainer':'formContainer'}`}>
                 <img src={closeLogo} onClick={() => setShow(!show)} className='closeIcon' alt="" />
-                <h2 className='layoutHeader'>Sign-up</h2>
+                <h2 className='layoutHeader'>Notes</h2>
                 <div className='layoutField'>
                     <label htmlFor="" className='layoutLabel'>name:</label>
                     <input type="text" className='layoutInput' />
                 </div>
                 <div className='layoutField'>
-                    <label htmlFor="" className='layoutLabel'>username:</label>
+                    <label htmlFor="" className='layoutLabel'>Content:</label>
                     <input type="text" className='layoutInput' />
-                </div>
-                <div className='layoutField'>
-                    <label htmlFor="" className='layoutLabel'>email:</label>
-                    <input type="text" className='layoutInput' />
-                </div>
-                <div className='layoutField'>
-                    <label htmlFor="" className='layoutLabel'>phoneno:</label>
-                    <input type="text" className='layoutInput' />
-                </div>
-                <div className='layoutField'>
-                    <label htmlFor="" className='layoutLabel'>age:</label>
-                    <input type="text" className='layoutInput' />
-                </div>
-                <div className='layoutField'>
-                    <label htmlFor="" className='layoutLabel'>password:</label>
-                    <input type="password" className='layoutInput' />
+                   <div> <TextEditor content={content} onChange={setContent} /></div>
                 </div>
                 <div className='layoutButtonDiv'>
                     <button className='button'>submit</button>
@@ -44,6 +37,7 @@ const FormModal = () => {
 
         </div>
     )
+
 }
 
 export default FormModal
