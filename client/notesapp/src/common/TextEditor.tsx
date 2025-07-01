@@ -109,9 +109,12 @@ const TextEditor: React.FC<Props> = ({ content, onChange }) => {
         </button>
       </div>
 
-      <div className="border rounded bg-gray-800 text-white p-3 min-h-[150px] prose prose-invert">
-        <EditorContent className='' editor={editor} />
-      </div>
+      <div className="border rounded bg-gray-800 text-white p-3 
+                prose prose-invert 
+                max-h-[300px] overflow-y-auto overflow-x-hidden 
+                hide-scrollbar">
+  <EditorContent editor={editor} className="border-none focus:outline-none" />
+</div>
     </div>
   )
 }

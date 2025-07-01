@@ -20,7 +20,7 @@ const Auth = () => {
                 <input type="password" className='border-[1px] rounded text-white px-[15px] py-[1%]'/>
             </div>
             <button className='bg-[#0052d9] text-white rounded border-none w-full mt-[5vh] py-[5px]'>submit</button>
-            <div className='text-center text-white rounded text-small mt-[7%]' onClick={()=>{setIsSignUp(true)}}>create account</div>
+            <div className='text-center text-white rounded text-small mt-[7%] cursor-pointer' onClick={()=>{setIsSignUp(true)}}>create account</div>
         </section>
 
         :<section className='bg-[black] shadow-[0px_0px_10px_2px_#989898] rounded-[10px] w-[80%] sm:w-[50%] md:w-[40%] lg:w-[30%]  px-[min(300px,5%)] py-[min(3%,2%)]'>
@@ -50,7 +50,7 @@ const Auth = () => {
                 <input type="password" className='border-[1px] rounded text-white px-[15px] py-[1%]'/>
             </div>
             <button className='bg-[#0052d9] text-white rounded border-none w-full mt-[5vh] py-[5px]'>submit</button>
-            <div className='text-center text-white rounded text-small mt-[7%]' onClick={()=>{setIsSignUp(false)}}>sign-in</div>
+            <div className='text-center text-white rounded text-small mt-[7%] cursor-pointer' onClick={()=>{setIsSignUp(false)}}>sign-in</div>
         </section>}
       
     </div>

@@ -34,7 +34,7 @@ useEffect(()=>{
     <li>
       <Link to="/" onClick={()=>setActivetab('home')}>
         <img id="Homelogo" src={homeLogo} alt="" className={`${
-        activetab === 'home'
+        window.location.pathname === '/'
           ? "shadow-[0px_0px_10px_2px_#989898] text-white bg-black rounded-[100px]"
           : ""
       }`}/>
@@ -44,7 +44,7 @@ useEffect(()=>{
     <li>
       <Link to="/notes" onClick={()=>setActivetab('notes')}>
         <img title='All-Notes' className={`h-[55px] w-[55px] ${
-        activetab === 'notes'
+        window.location.pathname === '/notes'
           ? "shadow-[0px_0px_10px_2px_#989898] text-white bg-black rounded-[100px]"
           : ""
       }`} src={notesLogo} alt="" />
@@ -67,11 +67,7 @@ useEffect(()=>{
       </Link>
     </li> */}
 
-    <div className={`relative ${
-        isProfileOpen
-          ? "shadow-[0px_0px_10px_2px_#989898] text-white bg-black rounded-[100px]"
-          : ""
-      }`} onClick={()=>setActivetab('profile')} ref={activeRef}>
+    <div className='relative text-white bg-black rounded-[100px]' ref={activeRef}>
       <li onClick={() => setIsProfileOpen(!isProfileOpen)}>
         <img id="Profilelogo" src={profileLogo} alt="" />
       </li>

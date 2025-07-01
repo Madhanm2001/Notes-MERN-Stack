@@ -6,6 +6,7 @@ import { BrowserRouter,Routes,Route} from 'react-router-dom'
 import Auth from './component/Auth.js'
 import FormModal from './common/FormModal.js'
 import Profile from './component/Profile.js'
+import AllFolders from './component/AllFolders.js'
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
       <Route path='/auth' element={<Auth/>}/>
       <Route path='/modal' element={<FormModal/>}/>
       <Route path='/profile' element={<Profile/>}/>
+      <Route path='/folder' element={<AllFolders/>}/>
+
     </Routes>
     </BrowserRouter>
     </>
