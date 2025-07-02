@@ -10,7 +10,7 @@ import filterIcon from '../images/filterIcon.jpg'
 import '../styles/folder.css'
 import searchLogo from '../images/searchLogo.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDownShortWide, faArrowUpAZ, faArrowUpShortWide,faTrash, faThumbtack,faFileCirclePlus,faArrowUpFromBracket, faPenToSquare, faBars, faFilter, faArrowUpZA, faList, faListSquares, faEdit, faArchive } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDownShortWide, faArrowUpAZ, faArrowUpShortWide,faTrash, faThumbtack,faFileCirclePlus,faArrowUpFromBracket, faPenToSquare, faBars, faFilter, faArrowUpZA, faList, faListSquares, faEdit, faArchive, faClock, faSort } from '@fortawesome/free-solid-svg-icons';
 import pinnedLogo from '../images/ispinned.jpg'
 import FormModal from '../common/FormModal'
 import TextEditor from '../common/TextEditor'
@@ -36,6 +36,12 @@ const AllNotes: React.FC = () => {
 
 
   }
+  const handleSortClick = (sortValue:any) => {
+  setSortVal(sortValue);
+  navigator.clipboard.writeText(sortValue)
+    .then(() => console.log("Copied:", sortValue))
+    .catch(err => console.error("Copy failed", err));
+}
   return (
 
     
@@ -43,7 +49,7 @@ const AllNotes: React.FC = () => {
       
       <div className='flex flex-wrap justify-between m-[25px] relative'>
         <AllFolders/>
-        <FontAwesomeIcon icon={faFileCirclePlus} style={{height:'50px',width:'50px'}} className='text-[white] mt-[15px] cursor-pointer hover:text-[#cdca00]' onClick={()=>setShow(true)}/>
+        <FontAwesomeIcon icon={faFileCirclePlus} style={{height:'40px',width:'40px'}} className={`${show?'text-[#cdca00]':'text-[#878787]'} mt-[20px] cursor-pointer`} onClick={()=>setShow(true)}/>
         <div className='flex gap-[80px] max-sm:gap-[10px] flex-wrap relative'>
           <span className='flex gap-1'>
             <input
@@ -87,8 +93,8 @@ const AllNotes: React.FC = () => {
       />
 
       <div className='flex justify-between'>
-        <li className='cursor-pointer' onClick={() => { setIsFilter(!isFilter), setIsSort(false) }}><FontAwesomeIcon icon={faFilter} style={{ width: "25px", height: "25px" }} className={`fa-solid fa-bars-filter ${isFilter ? 'text-black bg-[#cdca00]' : 'text-white bg-[#313131]'} p-2 rounded`} /></li>
-        <li className='cursor-pointer'><FontAwesomeIcon onClick={() => { setIsSort(!isSort), setIsFilter(false) }} icon={faListSquares} style={{ width: "25px", height: "25px" }} className={`fa-solid fa-bars-filter ${isSort ? 'text-black bg-[#cdca00]' : 'text-white bg-[#313131]'} p-2 rounded`} /></li>
+        <li className='cursor-pointer' onClick={() => { setIsFilter(!isFilter), setIsSort(false) }}><FontAwesomeIcon icon={faFilter} style={{ width: "25px", height: "25px" }} className={`fa-solid fa-bars-filter ${isFilter ? 'text-black bg-[#cdca00]' : 'text-black bg-[#878787]'} p-2 rounded`} /></li>
+        <li className='cursor-pointer'><FontAwesomeIcon onClick={() => { setIsSort(!isSort), setIsFilter(false) }} icon={faSort} style={{ width: "25px", height: "25px" }} className={`fa-solid fa-bars-filter ${isSort ? 'text-black bg-[#cdca00]' : 'text-black bg-[#878787]'} p-2 rounded`} /></li>
       </div>
 
       <div className='flex justify-between w-[100%]'>
@@ -125,7 +131,7 @@ const AllNotes: React.FC = () => {
 
       <ul id='folders' className='max-sm:justify-center'>
         {folderList.map((data, id) => {
-          return (<li key={id} className='shadow-[0px_0px_10px_2px_#989898] p-[25px] rounded-[10px] my-[10px] w-[200px] hover:scale-[1.02] active:scale-[0.95]'>
+          return (<li key={id} className='shadow-[0px_0px_10px_2px_#989898] p-[25px] rounded-[10px] my-[10px] w-[200px] hover:scale-[1.02]'>
              <div className="shadow rounded flex ">
   <FontAwesomeIcon
     icon={faThumbtack}
@@ -137,12 +143,11 @@ const AllNotes: React.FC = () => {
             <img className='mx-auto my-[8px]' id='noteslogo' src={appLogo} alt="" /><p id='folderName' className='text-center truncate w-full'>{data.data}</p>
             <div className='flex justify-center gap-[25px] my-[25px]'>
               <FontAwesomeIcon icon={faTrash} className='text-white hover:text-red-500' />
-              <FontAwesomeIcon icon={faEdit} className='text-white hover:text-blue-500' />
+              <FontAwesomeIcon icon={faEdit} className='text-white hover:text-yellow-500' />
               <FontAwesomeIcon icon={faArchive} className='text-white hover:text-orange-500' />
-              <FontAwesomeIcon icon={faArrowUpFromBracket} className='text-white hover:text-orange-500' />
-
+              <FontAwesomeIcon icon={faArrowUpFromBracket} onClick={() => handleSortClick('old to new')} className='text-white hover:text-green-500' />
             </div>
-            <p className='text-white text-center'>Date : Jun-08-2001</p>
+         <p className='text-white text-[12px] flex justify-center gap-[10px] '><span><FontAwesomeIcon className='text-white' icon={faClock}/></span> Jun 8, 2025, 12:00 AM</p>
           </li>)
         })}
       </ul>

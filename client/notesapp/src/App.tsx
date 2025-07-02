@@ -7,12 +7,14 @@ import Auth from './component/Auth.js'
 import FormModal from './common/FormModal.js'
 import Profile from './component/Profile.js'
 import AllFolders from './component/AllFolders.js'
+import NotesContent from './component/NotesContent.js'
+import NotesShare from './component/NotesShare.js'
 
 function App() {
   return (
     <>
     <BrowserRouter>
-    <Navbar/>
+    {!window.location.pathname.includes('/notes-view') && <Navbar/>}
     <Routes>
       <Route path='/' element={<Folder/>}/>
       <Route path="/notes/:id?" element={<AllNotes />} />
@@ -20,7 +22,8 @@ function App() {
       <Route path='/modal' element={<FormModal/>}/>
       <Route path='/profile' element={<Profile/>}/>
       <Route path='/folder' element={<AllFolders/>}/>
-
+      <Route path='/notes-content/:id?' element={<NotesContent/>}/>
+      <Route path='/notes-view/:id?' element={<NotesShare/>}/>
     </Routes>
     </BrowserRouter>
     </>

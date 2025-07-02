@@ -8,7 +8,7 @@ import editLogo from '../images/edit.jpg'
 import '../styles/folder.css'
 import searchLogo from '../images/searchLogo.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDownShortWide, faArrowUpAZ,faSort,faEdit, faFolderPlus,faArrowUpShortWide,faFilter,faArrowUpZA ,faBars,faListSquares, faTrash} from '@fortawesome/free-solid-svg-icons';
+import { faArrowDownShortWide, faArrowUpAZ,faSort,faEdit, faFolderPlus,faArrowUpShortWide,faFilter,faArrowUpZA ,faBars,faListSquares, faTrash, faClock} from '@fortawesome/free-solid-svg-icons';
 import AllFolders from './AllFolders'
 import FormModal from '../common/FormModal'
 import TextEditor from '../common/TextEditor'
@@ -59,7 +59,7 @@ const Folder: React.FC = () => {
       />
     <div className='flex flex-wrap justify-between m-[25px] relative'>
       <AllFolders/>
-        <FontAwesomeIcon icon={faFolderPlus} style={{height:'45px',width:'45px'}} className={`hover:text-[#cdca00] text-white mt-[20px] cursor-pointer`}onClick={()=>setShow(true)}/>
+        <FontAwesomeIcon icon={faFolderPlus} style={{height:'40px',width:'40px'}} className={`${show?'text-[#cdca00]':'text-[#878787]'} mt-[20px] cursor-pointer`} onClick={()=>setShow(true)}/>
         <div className='flex gap-[80px] max-sm:gap-[10px] flex-wrap relative'>
           <span className='flex gap-1'>
             <input
@@ -77,8 +77,8 @@ const Folder: React.FC = () => {
       </div>
 
 <div className='flex justify-between'>
-          <li className='cursor-pointer' onClick={() => {setIsFilter(!isFilter),setIsSort(false)}}><FontAwesomeIcon icon={faFilter} style={{ width: "25px", height: "25px" }} className={`fa-solid fa-bars-filter ${isFilter?'text-black bg-[#cdca00]':'text-white bg-[#313131]'} p-2 rounded`} /></li>
-          <li className='cursor-pointer'><FontAwesomeIcon onClick={() => {setIsSort(!isSort),setIsFilter(false)}} icon={faSort} style={{ width: "25px", height: "25px" }} className={`fa-solid fa-bars-filter ${isSort?'text-black bg-[#cdca00]':'text-white bg-[#313131]'} p-2 rounded`} /></li>
+          <li className='cursor-pointer' onClick={() => {setIsFilter(!isFilter),setIsSort(false)}}><FontAwesomeIcon icon={faFilter} style={{ width: "25px", height: "25px" }} className={`fa-solid fa-bars-filter ${isFilter?'text-black bg-[#cdca00]':'text-black bg-[#878787]'} p-2 rounded`} /></li>
+          <li className='cursor-pointer'><FontAwesomeIcon onClick={() => {setIsSort(!isSort),setIsFilter(false)}} icon={faSort} style={{ width: "25px", height: "25px" }} className={`fa-solid fa-bars-filter ${isSort?'text-black bg-[#cdca00]':'text-black bg-[#878787]'} p-2 rounded`} /></li>
       </div>
 
       <div className='flex justify-between w-[95%]'>
@@ -107,9 +107,9 @@ return  (isFilter&&<button value={data} onClick={(e)=>onClickFilter(e)} classNam
 </p>
             <div className='flex justify-center gap-[25px] my-[25px] flex-wrap'>
               <FontAwesomeIcon icon={faTrash} className='text-white hover:text-red-500' />
-              <FontAwesomeIcon icon={faEdit} className='text-white hover:text-blue-500' />
+              <FontAwesomeIcon icon={faEdit} className='text-white hover:text-yellow-500' />
             </div>
-            <p className='text-white text-center'>Date : Jun-08-2001</p>
+         <p className='text-white text-[12px] flex justify-center gap-[10px] '><span><FontAwesomeIcon className='text-white' icon={faClock}/></span>Jun 8, 2025, 12:00 AM</p>
           </li>
 
         })}
