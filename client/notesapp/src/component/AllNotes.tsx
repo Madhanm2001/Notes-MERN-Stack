@@ -49,7 +49,7 @@ const AllNotes: React.FC = () => {
       
       <div className='flex flex-wrap justify-between m-[25px] relative'>
         <AllFolders/>
-        <FontAwesomeIcon icon={faFileCirclePlus} style={{height:'40px',width:'40px'}} className={`${show?'text-[#cdca00]':'text-[#878787]'} mt-[20px] cursor-pointer`} onClick={()=>setShow(true)}/>
+        {/* <FontAwesomeIcon icon={faFileCirclePlus} style={{height:'40px',width:'40px'}} className={`${show?'text-[#cdca00]':'text-[#878787]'} mt-[20px] cursor-pointer`} onClick={()=>setShow(true)}/> */}
         <div className='flex gap-[80px] max-sm:gap-[10px] flex-wrap relative'>
           <span className='flex gap-1'>
             <input
@@ -63,7 +63,7 @@ const AllNotes: React.FC = () => {
             />
           </span>
         </div>
-        <p className='text-white mt-[25px] max-sm:ml-[20px] cursor-pointer'>clear all</p>
+        <p className='text-white mt-[25px] max-sm:ml-[20px] cursor-pointer hover:text-red-500'>clear all</p>
       </div>
 
       <FormModal
@@ -92,9 +92,12 @@ const AllNotes: React.FC = () => {
         }
       />
 
-      <div className='flex justify-between'>
-        <li className='cursor-pointer' onClick={() => { setIsFilter(!isFilter), setIsSort(false) }}><FontAwesomeIcon icon={faFilter} style={{ width: "25px", height: "25px" }} className={`fa-solid fa-bars-filter ${isFilter ? 'text-black bg-[#cdca00]' : 'text-black bg-[#878787]'} p-2 rounded`} /></li>
-        <li className='cursor-pointer'><FontAwesomeIcon onClick={() => { setIsSort(!isSort), setIsFilter(false) }} icon={faSort} style={{ width: "25px", height: "25px" }} className={`fa-solid fa-bars-filter ${isSort ? 'text-black bg-[#cdca00]' : 'text-black bg-[#878787]'} p-2 rounded`} /></li>
+      <div className='flex justify-between m-[25px]'>
+        <li className='cursor-pointer flex gap-[50px]'>
+          <FontAwesomeIcon icon={faFilter} style={{ width: "23px", height: "23px" }} className={`fa-solid fa-bars-filter ${isFilter ? 'text-black bg-[#cdca00]' : 'text-black bg-[#878787]'} p-2 rounded`} onClick={() => { setIsFilter(!isFilter), setIsSort(false) }} />
+        <FontAwesomeIcon icon={faFileCirclePlus} style={{height:'40px',width:'40px'}} className={`${show?'text-[#cdca00]':'text-[#878787]'} cursor-pointer`} onClick={()=>setShow(true)}/>
+          </li>
+        <li className='cursor-pointer'><FontAwesomeIcon onClick={() => { setIsSort(!isSort), setIsFilter(false) }} icon={faSort} style={{ width: "23px", height: "23px" }} className={`fa-solid fa-bars-filter ${isSort ? 'text-black bg-[#cdca00]' : 'text-black bg-[#878787]'} p-2 rounded`} /></li>
       </div>
 
       <div className='flex justify-between w-[100%]'>
@@ -135,19 +138,19 @@ const AllNotes: React.FC = () => {
              <div className="shadow rounded flex ">
   <FontAwesomeIcon
     icon={faThumbtack}
-    className={`${data.isPinned?'text-[#00809f]':"text-white"} hover:text-blue-500 transition-colors duration-300 ms-auto`}
+    className={`${data.isPinned?'text-[#00809f]':"text-[#878787]"} hover:text-blue-500 transition-colors duration-300 ms-auto`}
     style={{ transform: "rotate(45deg)" }}
   />
 </div>
 
             <img className='mx-auto my-[8px]' id='noteslogo' src={appLogo} alt="" /><p id='folderName' className='text-center truncate w-full'>{data.data}</p>
             <div className='flex justify-center gap-[25px] my-[25px]'>
-              <FontAwesomeIcon icon={faTrash} className='text-white hover:text-red-500' />
-              <FontAwesomeIcon icon={faEdit} className='text-white hover:text-yellow-500' />
-              <FontAwesomeIcon icon={faArchive} className='text-white hover:text-orange-500' />
-              <FontAwesomeIcon icon={faArrowUpFromBracket} onClick={() => handleSortClick('old to new')} className='text-white hover:text-green-500' />
+              <FontAwesomeIcon icon={faTrash} className='text-[#878787] hover:text-red-500' />
+              <FontAwesomeIcon icon={faEdit} className='text-[#878787] hover:text-yellow-500' />
+              <FontAwesomeIcon icon={faArchive} className='text-[#878787] hover:text-orange-500' />
+              <FontAwesomeIcon icon={faArrowUpFromBracket} onClick={() => handleSortClick('old to new')} className='text-[#878787] hover:text-green-500' />
             </div>
-         <p className='text-white text-[12px] flex justify-center gap-[10px] '><span><FontAwesomeIcon className='text-white' icon={faClock}/></span> Jun 8, 2025, 12:00 AM</p>
+         <p className='text-[#878787] text-[13px] flex justify-center gap-[10px] '><span><FontAwesomeIcon className='text-[#878787]' icon={faClock}/></span> Jun 8, 2025, 12:00 AM</p>
           </li>)
         })}
       </ul>

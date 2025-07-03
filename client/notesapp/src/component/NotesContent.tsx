@@ -7,7 +7,9 @@ import AllFolders from './AllFolders';
 const NotesContent = () => {
   return (
     <div >
-        <AllFolders/>
+        <div className='m-[20px]'>
+          <AllFolders/>
+        </div>
 
       <div className='flex flex-col justify-center items-center h-screen'>
         <div className='bg-[#3c3c3c] max-[500px]:flex-start max-[500px]:h-[30%] h-[20%] w-[80%] p-5 m-3 my-auto rounded flex justify-between flex-wrap gap-[15px]'>
@@ -16,16 +18,16 @@ const NotesContent = () => {
          <p className='text-white text-[12px] flex gap-[10px] my-[10px]'><span><FontAwesomeIcon className='text-white' icon={faClock}/></span> Jun 8, 2025, 12:00 AM</p>
           </div>
           <div className='flex justify-center gap-[20px] my-auto text-white'>
-              <FontAwesomeIcon icon={faTrash} className='hover:text-red-500' />
-              <FontAwesomeIcon icon={faEdit} className='hover:text-yellow-500' />
+              <FontAwesomeIcon icon={faTrash} className='hover:text-red-500 cursor-pointer' />
+              <FontAwesomeIcon icon={faEdit} className='hover:text-yellow-500 cursor-pointer' />
               <div className="shadow rounded flex ">
                 <FontAwesomeIcon
                   icon={faThumbtack}
-                  className={`${1?'text-blue-500':"text-white"} hover:text-blue-500 transition-colors duration-300 ms-auto`}
+                  className={`${1?'text-[#00809f]':"text-white"} cursor-pointer [#00809f] hover:text-blue-500 transition-colors duration-300 ms-auto`}
                   style={{ transform: "rotate(45deg)" }}
                 />
               </div>
-              <FontAwesomeIcon icon={faArrowUpFromBracket} className='hover:text-green-500' />
+              <FontAwesomeIcon icon={faArrowUpFromBracket} className='hover:text-green-500 cursor-pointer' />
 
           </div>
         </div>

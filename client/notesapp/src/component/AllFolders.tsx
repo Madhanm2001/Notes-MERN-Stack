@@ -31,7 +31,7 @@ const AllFolders = () => {
     }
     return (
         <div ref={activeRef}>
-            <div className='mt-[20px]' onClick={() => setIsFolderOpen(!isFolderOpen)}><FontAwesomeIcon icon={faListSquares}  style={{height:'20px',width:"20px"}} className={`p-3 rounded ${isFolderOpen?'text-black bg-[#cdca00]':'text-black bg-[#878787]'} cursor-pointer` }/></div>
+            <div className='mt-[20px]' onClick={() => setIsFolderOpen(!isFolderOpen)}><FontAwesomeIcon icon={faListSquares}  style={{height:'18px',width:"18px"}} className={`p-3 rounded ${isFolderOpen?'text-black bg-[#cdca00]':'text-black bg-[#878787]'} cursor-pointer` }/></div>
             {isFolderOpen &&
                 <div className='w-[275px] bg-[black] p-2 shadow-[0px_0px_10px_0px_grey]  absolute z-[100] p-3 rounded mx-auto h-[70vh] overflow-y-scroll overflow-x-hidden hide-scrollbar mx-auto'>
         <div className='flex gap-[80px] flex-wrap relative justify-center'>

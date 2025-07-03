@@ -35,9 +35,10 @@ body{
 }
 
 #folderName{
-    color: beige;
-    font-style: oblique;
+    color: white;
+    font-weight: bold;
     font-size: medium;
+    font-family: "Poppins", sans-serif;
 }
 
 #folders li{
