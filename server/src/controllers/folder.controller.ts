@@ -34,7 +34,7 @@ export const createFolder: any = async (req: Request, res: Response): Promise<vo
     }
 };
 
-export const getFolders: any = async (req: Request, res: Response) => {
+export const getFoldersByFilter: any = async (req: Request, res: Response) => {
 
     try {
 
@@ -72,7 +72,7 @@ export const getFolders: any = async (req: Request, res: Response) => {
         }
 
         const pageNumber = parseInt(page as string) || 1;
-        const limitNumber = parseInt(limit as string) || 1;
+        const limitNumber = parseInt(limit as string) || 10;
         const skip = (pageNumber - 1) * limitNumber;
 
         const totalFolders = await folderModel.countDocuments({
@@ -86,6 +86,39 @@ export const getFolders: any = async (req: Request, res: Response) => {
             .sort(sortOption)
             .skip(skip)
             .limit(limitNumber);
+
+        return res.status(201).json({ folders, totalFolders });
+
+    }
+
+    catch (error) {
+
+        res.status(500).json({ message: 'Server error' });
+
+    }
+
+}
+
+export const getFolders: any = async (req: Request, res: Response) => {
+
+    try {
+
+        // const { category, sort, page, limit } = req.query
+        const decode = (req as any).user;
+        let folders
+        let query:any={}
+
+        query = { isDeleted: false,userId: decode.userId }
+
+
+        const totalFolders = await folderModel.countDocuments({
+            ...query,
+            userId:decode.userId
+        });
+
+        folders = await folderModel
+            .find(query)
+            .select('name folderId updatedAt -_id')
 
         return res.status(201).json({ folders, totalFolders });
 
@@ -202,8 +235,8 @@ export const searchFolders: any = async (req: Request, res: Response) => {
 
         const folders = await folderModel.find({
             name: { $regex: name, $options: 'i' },
-            userId:decode.userId
-
+            userId:decode.userId,
+            isDeleted:false
         }).select('name folderId updatedAt -_id')
 
         console.log(folders);

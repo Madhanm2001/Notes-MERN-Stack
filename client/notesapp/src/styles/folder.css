@@ -28,9 +28,16 @@ body{
 }
 
 #folders{
-    margin:2% ;
+    margin:0 3% ;
     display: flex;
     gap:10vh;
+    flex-wrap: wrap;
+}
+
+#notes{
+    margin:0 3% ;
+    display: flex;
+    gap:24vh;
     flex-wrap: wrap;
 }
 

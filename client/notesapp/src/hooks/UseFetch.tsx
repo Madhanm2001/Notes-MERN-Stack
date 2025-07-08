@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { AxiosResponse } from 'axios';
 import axios from 'axios';
+import axiosInstance from '../Api/AxiosInstance';
 
 
 type QueryType = string | object | number[] | string[];
@@ -12,7 +13,7 @@ const useFetch = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const axiosFunction = async (
-    method: 'get' | 'post' | 'put' | 'delete',
+    method:string,
     url: string,
     params?: string,
     query?: QueryType,
@@ -34,30 +35,35 @@ const useFetch = () => {
 
       switch (method) {
         case 'get':
-          response = await axios.get(fullUrl);
+          response = await axiosInstance.get(fullUrl);
           break;
         case 'post':
-          response = await axios.post(fullUrl, payload);
+          response = await axiosInstance.post(fullUrl, payload);
           break;
         case 'put':
-          response = await axios.put(fullUrl, payload);
+          response = await axiosInstance.put(fullUrl, payload);
           break;
+        case 'patch':
+          response = await axiosInstance.patch(fullUrl,payload);
+          break;  
         case 'delete':
-          response = await axios.delete(fullUrl);
+          response = await axiosInstance.delete(fullUrl);
           break;
         default:
           throw new Error('Invalid HTTP method');
       }
 
       setData(response.data);
+      return response.data
     } catch (err: any) {
       setError(err.message || 'Something went wrong');
     } finally {
       setLoading(false);
     }
+    return {data, error, loading}
   };
 
-  return { data, error, loading, axiosFunction };
+  return {axiosFunction};
 };
 
 export default useFetch;

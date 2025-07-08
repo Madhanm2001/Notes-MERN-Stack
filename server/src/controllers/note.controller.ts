@@ -76,7 +76,7 @@ export const getNotes = async (req: Request, res: Response): Promise<void | any 
 
         const notes = await noteModel
             .find(query)
-            .select('name noteId updatedAt isPinned -_id')
+            .select('name noteId updatedAt isPinned isArchived -_id')
             .sort(sortOption)
             .skip(skip)
             .limit(limitNumber);
@@ -146,16 +146,22 @@ export const getAllNotes = async (req: Request, res: Response): Promise<void | a
         const skip = (pageNumber - 1) * limitNumber;
         const totalNotes = await noteModel.countDocuments(query);
 
-        const notes = await noteModel
+        if(page==='infinite'){
+            const notes = await noteModel
             .find(query)
-            .select('name noteId updatedAt isPinned -_id')
+            .select('name noteId updatedAt -_id')
+            return res.status(200).json({ notes, totalNotes });
+        }
+        else{
+            const notes = await noteModel
+            .find(query)
+            .select('name noteId updatedAt isPinned isArchived -_id')
             .sort(sortOption)
             .skip(skip)
             .limit(limitNumber);
-
-            
-
-        return res.status(200).json({ notes, totalNotes });
+            return res.status(200).json({ notes, totalNotes });
+        }
+        
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
@@ -219,7 +225,8 @@ export const searchAllNotes: any = async (req: Request, res: Response) => {
 
         const notes = await noteModel.find({
             name: { $regex: name, $options: 'i' },
-            userId: decode.userId
+            userId: decode.userId,
+            isDeleted:false
         }).select('name noteId updatedAt -_id')
 
         console.log(notes);
@@ -248,7 +255,8 @@ export const searchNotes: any = async (req: Request, res: Response) => {
         const notes = await noteModel.find({
             name: { $regex: name, $options: 'i' },
             folderId,
-            userId: decode.userId
+            userId: decode.userId,
+            isDeleted:false
         }).select('name noteId updatedAt -_id')
 
         console.log(notes);

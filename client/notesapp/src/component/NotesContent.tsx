@@ -1,14 +1,24 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { faArrowDownShortWide, faArrowUpAZ, faArrowUpShortWide,faTrash, faThumbtack,faFileCirclePlus,faArrowUpFromBracket, faPenToSquare, faBars, faFilter, faArrowUpZA, faList, faListSquares, faEdit, faArchive, faClock } from '@fortawesome/free-solid-svg-icons';
-import AllFolders from './AllFolders';
+import AllFolders from './SideBarList';
+import { useParams } from 'react-router-dom';
 
 
 const NotesContent = () => {
+
+  const {id}=useParams()
+
+  useEffect(() => {
+      console.log(id);
+      // fetchNotes()
+    }, [])
+
   return (
     <div >
-        <div className='m-[20px]'>
+        <div className='m-[20px] flex gap-[10px] justify-between'>
           <AllFolders/>
+          <div className='text-[white] mt-[30px] text-[15px]'>{'< back to notes'}</div>
         </div>
 
       <div className='flex flex-col justify-center items-center h-screen'>
@@ -27,6 +37,7 @@ const NotesContent = () => {
                   style={{ transform: "rotate(45deg)" }}
                 />
               </div>
+              <FontAwesomeIcon icon={faArchive} className='text-[white] hover:text-orange-500' />
               <FontAwesomeIcon icon={faArrowUpFromBracket} className='hover:text-green-500 cursor-pointer' />
 
           </div>

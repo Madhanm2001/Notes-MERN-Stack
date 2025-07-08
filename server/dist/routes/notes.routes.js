@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const note_controller_1 = require("../controllers/note.controller");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const notesRouter = express_1.default.Router();
+notesRouter.get('/', auth_middleware_1.authenticateJWT, note_controller_1.getAllNotes);
+notesRouter.put('/create/:folderId', auth_middleware_1.authenticateJWT, note_controller_1.createNote);
+notesRouter.get('/getAll/:folderId', auth_middleware_1.authenticateJWT, note_controller_1.getNotes);
+notesRouter.get('/get/:noteId', auth_middleware_1.authenticateJWT, note_controller_1.getNote);
+notesRouter.put('/update/:noteId', auth_middleware_1.authenticateJWT, note_controller_1.updateNote);
+notesRouter.put('/archived/:noteId', auth_middleware_1.authenticateJWT, note_controller_1.noteArchived);
+notesRouter.put('/unarchived/:noteId', auth_middleware_1.authenticateJWT, note_controller_1.noteUnArchived);
+notesRouter.put('/pinned/:noteId', auth_middleware_1.authenticateJWT, note_controller_1.notePinned);
+notesRouter.put('/unpinned/:noteId', auth_middleware_1.authenticateJWT, note_controller_1.noteUnpinned);
+notesRouter.delete('/:noteId', auth_middleware_1.authenticateJWT, note_controller_1.deleteNote);
+notesRouter.get('/search/:folderId', auth_middleware_1.authenticateJWT, note_controller_1.searchNotes);
+notesRouter.get('/searchAll/:folderId', auth_middleware_1.authenticateJWT, note_controller_1.searchAllNotes);
+exports.default = notesRouter;

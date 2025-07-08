@@ -11,9 +11,9 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('JWTToken');
+    const token = localStorage.getItem('NotesToken');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token.replace(/"/g, '')}`;
     }
     return config;
   },
@@ -25,8 +25,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       console.warn('Unauthorized! Logging out...');
-      localStorage.removeItem('token');
-      window.location.href = '/login'; 
+      localStorage.removeItem('token'); 
     }
     return Promise.reject(error);
   }

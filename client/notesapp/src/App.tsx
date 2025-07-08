@@ -6,14 +6,17 @@ import { BrowserRouter,Routes,Route} from 'react-router-dom'
 import Auth from './component/Auth.js'
 import FormModal from './common/FormModal.js'
 import Profile from './component/Profile.js'
-import AllFolders from './component/AllFolders.js'
+import AllFolders from './component/SideBarList.js'
 import NotesContent from './component/NotesContent.js'
 import NotesShare from './component/NotesShare.js'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 function App() {
+  const queryClient = new QueryClient()
   return (
     <>
     <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
     {!window.location.pathname.includes('/notes-view') && <Navbar/>}
     <Routes>
       <Route path='/' element={<Folder/>}/>
@@ -25,6 +28,7 @@ function App() {
       <Route path='/notes-content/:id?' element={<NotesContent/>}/>
       <Route path='/notes-view/:id?' element={<NotesShare/>}/>
     </Routes>
+    </QueryClientProvider>
     </BrowserRouter>
     </>
   )

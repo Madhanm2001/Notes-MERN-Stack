@@ -14,8 +14,9 @@ notesRouter.put('/unarchived/:noteId',authenticateJWT,noteUnArchived);
 notesRouter.put('/pinned/:noteId',authenticateJWT,notePinned);
 notesRouter.put('/unpinned/:noteId',authenticateJWT,noteUnpinned);
 notesRouter.delete('/:noteId',authenticateJWT,deleteNote);
+notesRouter.get('/searchall',authenticateJWT,searchAllNotes);
 notesRouter.get('/search/:folderId',authenticateJWT,searchNotes);
-notesRouter.get('/searchAll/:folderId',authenticateJWT,searchAllNotes);
+
 
 
 export default notesRouter;

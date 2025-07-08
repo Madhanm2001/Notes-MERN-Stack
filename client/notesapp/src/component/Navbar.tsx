@@ -2,14 +2,17 @@ import React, { useEffect, useRef, useState, type RefObject } from 'react'
 import notesLogo from '../images/notesinsideLogo.png'
 import profileLogo from '../images/ProfileLogo.jpg'
 import '../styles/Navbar.css'
-import { Link , useNavigate } from 'react-router-dom'
+import { href, Link , useNavigate } from 'react-router-dom'
 import homeLogo from '../images/homeLogo.png'
+import useLocalStorage from '../hooks/UseLocalStorage'
 
 const Navbar: React.FC = () => {
 
   const navigate=useNavigate()
   const[isProfileOpen,setIsProfileOpen]=useState(false)
   const[activetab,setActivetab]=useState('home')
+  const{setItem,getItem,deleteItem}=useLocalStorage()
+
 
 const activeRef: any= useRef(null)
 
@@ -42,9 +45,9 @@ useEffect(()=>{
     </li>
 
     <li>
-      <Link to="/notes" onClick={()=>setActivetab('notes')}>
-        <img title='All-Notes' className={`h-[55px] w-[55px] ${
-        window.location.pathname === '/notes'
+      <Link to="/notes" onClick={(e) => { setActivetab('notes'),window.location.href='/notes';
+}}>
+        <img title='All-Notes' className={`h-[55px] w-[55px] ${window.location.pathname=='/notes'
           ? "shadow-[0px_0px_10px_2px_#989898] text-white bg-black rounded-[100px]"
           : ""
       }`} src={notesLogo} alt="" />
@@ -91,6 +94,7 @@ useEffect(()=>{
             onClick={() => {
               navigate("/auth");
               setIsProfileOpen(false);
+              deleteItem('NotesToken')
             }}
           >
             Sign-out

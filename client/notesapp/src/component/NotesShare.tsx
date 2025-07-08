@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 import { faArrowDownShortWide, faArrowUpAZ, faArrowUpShortWide,faTrash, faThumbtack,faFileCirclePlus,faArrowUpFromBracket, faPenToSquare, faBars, faFilter, faArrowUpZA, faList, faListSquares, faEdit, faArchive, faClock } from '@fortawesome/free-solid-svg-icons';
-import AllFolders from './AllFolders';
+import AllFolders from './SideBarList';
 
 
 const NotesShare = () => {

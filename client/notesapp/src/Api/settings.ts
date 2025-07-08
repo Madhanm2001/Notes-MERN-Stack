@@ -1,0 +1,31 @@
+export const URL={
+    Auth:{
+        signUp:'/auth/sign-up',
+        signIn:'/auth/sign-in'
+    },
+    Profile:{
+        get:'/profile',
+        update:'/profile/update',
+        changePassword:'/profile/change-password',
+    },
+    Folder:{
+        create:'/folder',
+        getCategories:'/folder/categories',
+        search:'/folder/search',
+        getAllFolders:'/folder/getFolders'
+    },
+    Note:{
+        create:'/note/create',
+        update:'/note/update',
+        getAllByFolder:'/note/getAll',
+        get:'/note/get',
+        getAll:'/note',
+        delete:'/note',
+        searchByFolder:'note/search',
+        searchAll:'/note/searchall',
+        archived:'/note/archived',
+        unarchived:'/note/unarchived',
+        pinned:'/note/pinned',
+        unpinned:'/note/unpinned',
+    }
+}
