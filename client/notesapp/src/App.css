@@ -47,13 +47,13 @@ body{
     @apply border-none outline-none;
   }
 }
-    .closeIcon { @apply ms-auto h-[35px] w-[35px] rounded-[100px]; }
+    .closeIcon { @apply ms-auto h-[35px] w-[35px] rounded-[100px] cursor-pointer; }
     .layoutHeader { @apply text-[#c8c0c0] text-[25px]; }
     .layoutField { @apply flex flex-col mt-[5vh]; }
     .layoutLabel { @apply text-white font-semibold; }
     .layoutInput { @apply border-[1px] rounded text-white px-[15px] py-[1%]; }
     .layoutButtonDiv { @apply flex justify-end gap-[20px]; }
-    .button { @apply bg-[#0052d9] text-white rounded border-none mt-[5vh] p-[5px_10px]; }
+    .button { @apply bg-[#0052d9] text-white rounded border-none mt-[5vh] p-[5px_10px] cursor-pointer; }
     .searchbarFolder{
         @apply h-[20px] w-[20px] absolute max-[393px]:left-[190px] max-[393px]:top-[55%] max-[640px]:left-[190px] max-[640px]:top-[45%] max-[688px]:top-[55%] max-[688px]:left-[460px] max-[782px]:top-[45%] max-[782px]:left-[470px] top-[40%] left-[470px] cursor-pointer
     }

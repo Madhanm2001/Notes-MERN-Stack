@@ -4,6 +4,7 @@ import { useQuery,type UseQueryResult } from '@tanstack/react-query'
 import useFetch from '../hooks/UseFetch'
 import { URL } from '../Api/settings'
 import UseValidator from '../hooks/UseValidator'
+import { toast } from 'react-toastify'
 
 
 const Profile = () => {
@@ -70,10 +71,11 @@ if(Object.keys(error).length==0){
         setChangePassErr(ps=>({
           ...ps,
           invalid:'enter valid old password'
-        }))
+        }))       
 
       }
       else{
+        toast.info('password is changed')
 setChangePass(false)
       }
       
@@ -92,6 +94,7 @@ if(Object.keys(error).length==0){
 
    axiosFunction('patch', URL.Profile.update, '', '', profileDetail)
     .then(()=>{
+      toast.info('profile is edited')
       setShowProfile(false)
     })
 
