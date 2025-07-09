@@ -26,6 +26,7 @@ const Auth = () => {
 
     },[])
 
+
     const onClickSignUp = () => {
 
         const error = signUpValidator(signUpDetails) || {}
@@ -100,6 +101,16 @@ const onClickSignIn = async () => {
         }))
     }
 
+//     const onKeyDownEnter = (e: any) => {
+//   if (e.key === 'Enter') {
+//     if (e.target.value === 'signin') {
+//       onClickSignIn()
+//     } else if (e.target.value === 'signup') {
+//       onClickSignUp()
+//     }
+//   }
+// }
+
     return (
         <div className='flex flex-col justify-center items-center mt-[7%]'>
 
@@ -112,10 +123,12 @@ const onClickSignIn = async () => {
                 </div>
                 <div className='flex flex-col mt-[5vh]'>
                     <label htmlFor="" className='text-white font-semibold'>password:</label>
-                    <input type="password" name='password' value={signInDetails.password} onChange={handleChangeSignIn} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
+                    <input type="password" name='password' value={signInDetails.password} onKeyDown={(e) => {
+    if (e.key === 'Enter') onClickSignIn()
+  }} onChange={handleChangeSignIn} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
                     <div className='text-[red] text-[12px]'>{signInError.password}</div>
                 </div>
-                <button className='bg-[#0052d9] text-white rounded border-none w-full mt-[5vh] py-[5px] cursor-pointer' onClick={onClickSignIn}>submit</button>
+                <button className='bg-[#0052d9] text-white rounded border-none w-full mt-[5vh] py-[5px] cursor-pointer' value={'signin'} onClick={onClickSignIn}>submit</button>
                 <div className='text-[red] text-[12px] text-center'>{signInError.invalid}</div>
                 <div className='text-center text-white rounded text-small mt-[7%] cursor-pointer' onClick={() => { setIsSignUp(true),setSignInError({usernameoremail:'',password:'',invalid:''}),setSignInDetails({usernameoremail:'',password:''}) }}>create account</div>
             </section>
@@ -144,7 +157,9 @@ const onClickSignIn = async () => {
                     </div>
                     <div className='flex flex-col mt-[5vh]'>
                         <label htmlFor="" className='text-white font-semibold'>password:</label>
-                        <input type="password" name='password' onChange={handleChangeSignUp} value={signUpDetails.password} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
+                        <input type="password" name='password' onChange={handleChangeSignUp} onKeyDown={(e) => {
+    if (e.key === 'Enter') onClickSignUp()
+  }} value={signUpDetails.password} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
                         <div className='text-[red] text-[12px]'>{signUpError.password}</div>
                     </div>
                     <div className='flex flex-col mt-[5vh]'>
@@ -152,7 +167,7 @@ const onClickSignIn = async () => {
                         <input type="password" name='confirmPassword' onChange={handleChangeSignUp} value={signUpDetails.confirmPassword} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
                         <div className='text-[red] text-[12px]'>{signUpError.confirmPassword}</div>
                     </div>
-                    <button className='bg-[#0052d9] text-white rounded border-none w-full mt-[5vh] py-[5px] cursor-pointer' onClick={onClickSignUp}>submit</button>
+                    <button className='bg-[#0052d9] text-white rounded border-none w-full mt-[5vh] py-[5px] cursor-pointer' value={'signup'} onClick={onClickSignUp}>submit</button>
                     <div className='text-center text-white rounded text-small mt-[7%] cursor-pointer' onClick={() => { setIsSignUp(false),setSignUpError({username: '', password: '', confirmPassword: '', phoneNumber: '', email: '', name: ''}),setSignUpDetails({username: '', password: '', confirmPassword: '', phoneNumber: '', email: '', name: ''}) }}>sign-in</div>
                 </section>}
 
