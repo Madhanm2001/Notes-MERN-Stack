@@ -346,14 +346,12 @@ console.log(typeof(data.noteId),data.isArchived);
       <FormModal
         show={deleteShow}
         isNotes={false}
-        onclose={() => setDeleteShow(false)}
         onlayoutclose={() => setDeleteShow(false)}
         cancel={() => setDeleteShow(false)}
-        header={'Delete-Note'}
         content='Are you sure you want to delete this note?'
         footer={
           <>
-            <button className='button cursor-pointer' onClick={onDeleteConfirm}>submit</button>
+            <button className='button cursor-pointer' onClick={onDeleteConfirm}>delete</button>
             <button className='button cursor-pointer' onClick={() => setDeleteShow(!deleteShow)}>cancel</button>
           </>
         }
@@ -366,7 +364,7 @@ console.log(typeof(data.noteId),data.isArchived);
         onclose={() => setShow(false)}
         onlayoutclose={() => setShow(false)}
         cancel={() => setShow(false)}
-        header={'Create-Notes'}
+        header={notesId?'Update-Notes':'Create-Notes'}
         content={<>
           <div className='layoutField'>
             <label htmlFor="" className='layoutLabel'>Title:</label>
