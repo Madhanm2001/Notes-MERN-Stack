@@ -3,7 +3,7 @@ import appLogo from '../images/AppLogo.jpg'
 import '../styles/folder.css'
 import searchLogo from '../images/searchLogo.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDownShortWide, faArrowUpAZ, faArrowUpShortWide, faTrash, faThumbtack, faFileCirclePlus, faArrowUpFromBracket, faPenToSquare, faBars, faFilter, faArrowUpZA, faList, faListSquares, faEdit, faArchive, faClock, faSort } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDownShortWide, faArrowUpAZ, faArrowUpShortWide, faTrash, faThumbtack, faFileCirclePlus, faCopy, faFilter, faArrowUpZA, faEdit, faArchive, faClock, faSort } from '@fortawesome/free-solid-svg-icons';
 import FormModal from '../common/FormModal'
 import TextEditor from '../common/TextEditor'
 import AllFolders from './SideBarList'
@@ -271,6 +271,7 @@ console.log(typeof(data.noteId),data.isArchived);
       containerRef.current.scrollTop = 0;
     }
   }
+
   const CreateFolder = () => {
     setShow(true)
     setNotesDetail({ name: '', content: '' })
@@ -334,7 +335,7 @@ console.log(typeof(data.noteId),data.isArchived);
         </>}
         footer={
           <>
-            <button className='button' onClick={() => onSubmitNote()}>submit</button>
+            <button className='button' onClick={onSubmitNote}>submit</button>
             <button className='button' onClick={() => setShow(!show)}>cancel</button>
           </>
         }
@@ -396,8 +397,8 @@ console.log(typeof(data.noteId),data.isArchived);
             <div className='flex justify-center gap-[25px] my-[25px]'>
               <FontAwesomeIcon icon={faTrash} className='text-[#878787] hover:text-red-500 cursor-pointer' onClick={() => onclickDelete(data)} />
               <FontAwesomeIcon icon={faEdit} className='text-[#878787] hover:text-yellow-500 cursor-pointer' onClick={() => onclickEdit(data)} />
-              <FontAwesomeIcon icon={faArchive} className={`${data.isArchived?'text-[#d58400]':'text-[#878787]'} hover:text-orange-500 cursor-pointer`} onClick={() => onToogleArchived(data)}/>
-              <FontAwesomeIcon icon={faArrowUpFromBracket} onClick={() => handleSortClick(`/notes-share/${data.noteId}`)} className='text-[#878787] hover:text-green-500 cursor-pointer' />
+              <FontAwesomeIcon icon={faArchive} className={`${data.isArchived?'text-[#cf8000]':'text-[#878787]'} hover:text-orange-500 cursor-pointer`} onClick={() => onToogleArchived(data)}/>
+              <FontAwesomeIcon icon={faCopy} onClick={() => handleSortClick(`localhost:5173/notes-view/${data.noteId}`)} className='text-[#878787] hover:text-green-500 cursor-pointer' />
             </div>
             <p className='text-[#878787] text-[13px] flex justify-center gap-[10px] '><span><FontAwesomeIcon className='text-[#878787]' icon={faClock} /></span>{`${data?.date}, ${data?.time}`}</p>
           </li>)
