@@ -38,7 +38,7 @@ useEffect(()=>{
    {window.location.pathname.includes('/auth')&&<li>
    <div className='flex gap-1'>
     <img title='All-Notes' className={`h-[55px] w-[55px]  text-white bg-black rounded-[100px]`} src={notesLogo} alt="" />
-    <span><h2 className='text-white my-[10px]'>NotesApp</h2></span>
+    <span><h2 className='text-white my-[10px] italic'>Notiva</h2></span>
    </div>
     </li>} 
     {/* {window.location.pathname.includes('/auth')&&<li><h2 className='text-white'>NotesApp</h2></li>
