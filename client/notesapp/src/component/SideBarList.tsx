@@ -135,7 +135,7 @@ const SideBarList = () => {
             <span className='flex gap-2'>
               <input
                 type="text"
-                className='border-[2px] border-white text-white h-[35px] rounded mt-[25px]'
+                className='border-[2px] border-white text-white h-[35px] rounded mt-[25px] p-[5px]'
                 value={searchValue}
                 onChange={onclickSearch}
               />

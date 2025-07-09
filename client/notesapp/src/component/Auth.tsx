@@ -108,7 +108,7 @@ const onClickSignIn = async () => {
                     <input type="password" name='password' value={signInDetails.password} onChange={handleChangeSignIn} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
                     <div className='text-[red] text-[12px]'>{signInError.password}</div>
                 </div>
-                <button className='bg-[#0052d9] text-white rounded border-none w-full mt-[5vh] py-[5px]' onClick={onClickSignIn}>submit</button>
+                <button className='bg-[#0052d9] text-white rounded border-none w-full mt-[5vh] py-[5px] cursor-pointer' onClick={onClickSignIn}>submit</button>
                 <div className='text-[red] text-[12px] text-center'>{signInError.invalid}</div>
                 <div className='text-center text-white rounded text-small mt-[7%] cursor-pointer' onClick={() => { setIsSignUp(true),setSignInError({usernameoremail:'',password:'',invalid:''}),setSignInDetails({usernameoremail:'',password:''}) }}>create account</div>
             </section>
@@ -145,7 +145,7 @@ const onClickSignIn = async () => {
                         <input type="password" name='confirmPassword' onChange={handleChangeSignUp} value={signUpDetails.confirmPassword} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
                         <div className='text-[red] text-[12px]'>{signUpError.confirmPassword}</div>
                     </div>
-                    <button className='bg-[#0052d9] text-white rounded border-none w-full mt-[5vh] py-[5px]' onClick={onClickSignUp}>submit</button>
+                    <button className='bg-[#0052d9] text-white rounded border-none w-full mt-[5vh] py-[5px] cursor-pointer' onClick={onClickSignUp}>submit</button>
                     <div className='text-center text-white rounded text-small mt-[7%] cursor-pointer' onClick={() => { setIsSignUp(false),setSignUpError({username: '', password: '', confirmPassword: '', phoneNumber: '', email: '', name: ''}),setSignUpDetails({username: '', password: '', confirmPassword: '', phoneNumber: '', email: '', name: ''}) }}>sign-in</div>
                 </section>}
 
