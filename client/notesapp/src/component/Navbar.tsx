@@ -34,7 +34,11 @@ useEffect(()=>{
   return (
     <div id="navbarWrap">
   <ul id="Navbar">
-    <li>
+
+    {window.location.pathname.includes('/auth')&&<img title='All-Notes' className={`h-[55px] w-[55px]  text-white bg-black rounded-[100px]`} src={notesLogo} alt="" />
+    }
+    
+   {!window.location.pathname.includes('/auth')&& <li>
       <Link to="/" onClick={()=>setActivetab('home')}>
         <img id="Homelogo" src={homeLogo} alt="" className={`${
         window.location.pathname === '/'
@@ -42,9 +46,9 @@ useEffect(()=>{
           : ""
       }`}/>
       </Link>
-    </li>
+    </li>}
 
-    <li>
+    {!window.location.pathname.includes('/auth')&&<li>
       <Link to="/notes" onClick={(e) => { setActivetab('notes'),window.location.href='/notes';
 }}>
         <img title='All-Notes' className={`h-[55px] w-[55px] ${window.location.pathname=='/notes'
@@ -52,7 +56,7 @@ useEffect(()=>{
           : ""
       }`} src={notesLogo} alt="" />
       </Link>
-    </li>
+    </li>}
 
     {/* <li
       className={`mt-[20px] text-[min(5vw,20px)] ${
@@ -70,7 +74,7 @@ useEffect(()=>{
       </Link>
     </li> */}
 
-    <div className='relative text-white bg-black rounded-[100px]' ref={activeRef}>
+    {!window.location.pathname.includes('/auth')&&<div className='relative text-white bg-black rounded-[100px]' ref={activeRef}>
       <li onClick={() => setIsProfileOpen(!isProfileOpen)}>
         <img id="Profilelogo" src={profileLogo} alt="" />
       </li>
@@ -101,7 +105,7 @@ useEffect(()=>{
           </li>
         </ul>
       )}
-    </div>
+    </div>}
   </ul>
 </div>
 

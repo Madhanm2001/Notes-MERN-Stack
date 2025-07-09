@@ -10,27 +10,43 @@ import AllFolders from './component/SideBarList.js'
 import NotesContent from './component/NotesContent.js'
 import NotesShare from './component/NotesShare.js'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ToastContainer, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const queryClient = new QueryClient()
   return (
     <>
-    <BrowserRouter>
+  <BrowserRouter>
     <QueryClientProvider client={queryClient}>
-    {!window.location.pathname.includes('/notes-view') && <Navbar/>}
-    <Routes>
-      <Route path='/' element={<Folder/>}/>
-      <Route path="/notes/:id?" element={<AllNotes />} />
-      <Route path='/auth' element={<Auth/>}/>
-      <Route path='/modal' element={<FormModal/>}/>
-      <Route path='/profile' element={<Profile/>}/>
-      <Route path='/folder' element={<AllFolders/>}/>
-      <Route path='/notes-content/:id?' element={<NotesContent/>}/>
-      <Route path='/notes-view/:id?' element={<NotesShare/>}/>
-    </Routes>
+      {!window.location.pathname.includes('/notes-view')&& <Navbar />}
+      <Routes>
+        <Route path='/' element={<Folder />} />
+        <Route path="/notes/:id?" element={<AllNotes />} />
+        <Route path='/auth' element={<Auth />} />
+        <Route path='/modal' element={<FormModal />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/folder' element={<AllFolders />} />
+        <Route path='/notes-content/:id?' element={<NotesContent />} />
+        <Route path='/notes-view/:id?' element={<NotesShare />} />
+      </Routes>
+      <ToastContainer
+            position="top-left"
+            autoClose={1000}
+            hideProgressBar
+            newestOnTop
+            closeOnClick={false}
+            rtl
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover={false}
+            theme="colored"
+            transition={Slide}
+          />
     </QueryClientProvider>
-    </BrowserRouter>
-    </>
+  </BrowserRouter>
+</>
+
   )
 }
 

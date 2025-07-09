@@ -8,6 +8,7 @@ import { URL } from '../Api/settings';
 import TextEditor from '../common/TextEditor';
 import FormModal from '../common/FormModal';
 import UseValidator from '../hooks/UseValidator';
+import { toast } from 'react-toastify';
 
 
 const NotesContent = () => {
@@ -20,6 +21,7 @@ const NotesContent = () => {
   const [notesDetail, setNotesDetail] = useState({ name: '', content: '', date: '', time: '', isArchived: false, isPinned: false, noteId: id })
   const [notesContent, setNotesContent] = useState({ name: '', content: '', date: '', time: '', isArchived: false, isPinned: false, noteId: id })
   const [noteErr, setNoteErr] = useState({ name: '', content: '' })
+  const[deleteShow,setDeleteShow]=useState(false)
   const { noteValidator } = UseValidator()
 
 
@@ -52,32 +54,45 @@ const NotesContent = () => {
 
   }
 
-  const onclickDelete = () => {
+   const onclickDelete = () => {
+    setDeleteShow(true)
+};
+
+
+  const onDeleteConfirm = () => {
     axiosFunction("delete", URL.Note.delete, id, "", "")
       .then(() => {
+        toast.error('Note is Deleted')
         navigate(-1)
       });
   };
 
   const onTooglePinned = (data: any) => {
-    console.log(data.isPinned, 'Pinned');
 
     if (data.isPinned) {
-      axiosFunction('put', URL.Note.unpinned, id, '', { isPinned: true })
-    }
-    else {
-      axiosFunction('put', URL.Note.pinned, id, '', { isPinned: false })
-    }
+          axiosFunction('put', URL.Note.unpinned, id, '', { isPinned: true }).then(()=>{
+            toast.info('note is unpinned')
+          })
+        }
+        else {
+          axiosFunction('put', URL.Note.pinned, id, '', { isPinned: false }).then(()=>{
+            toast.info('note is pinned')
+          })
+        }
     fetchNotes()
   }
   const onToogleArchived = (data: any) => {
-    console.log(data, 'Pinned');
 
     if (data.isArchived) {
-      axiosFunction('put', URL.Note.unarchived, id, '', { isArchived: false });
-    } else {
-      axiosFunction('put', URL.Note.archived, id, '', { isArchived: true });
-    }
+        axiosFunction('put', URL.Note.unarchived, id, '', { isArchived: false }).then(()=>{
+            toast.info('note is unarchived')
+    
+        })
+      } else {
+        axiosFunction('put', URL.Note.archived, id, '', { isArchived: true }).then(()=>{
+            toast.info('note is archived')
+        })
+      }
     fetchNotes()
 
   }
@@ -120,6 +135,7 @@ const NotesContent = () => {
         })
     }
   }
+  
 
   const handleShareClick = (link: any) => {
     navigator.clipboard.writeText(link)
@@ -129,7 +145,21 @@ const NotesContent = () => {
 
   return (
     <div >
-
+<FormModal
+        show={deleteShow}
+        isNotes={false}
+        onclose={() => setDeleteShow(false)}
+        onlayoutclose={() => setDeleteShow(false)}
+        cancel={() => setDeleteShow(false)}
+        header={'Delete-Note'}
+        content='Are you sure you want to delete this note?'
+        footer={
+          <>
+            <button className='button cursor-pointer' onClick={onDeleteConfirm}>submit</button>
+            <button className='button cursor-pointer' onClick={() => setDeleteShow(!deleteShow)}>cancel</button>
+          </>
+        }
+      />
       <FormModal
         show={show}
         isclose={true}

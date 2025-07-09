@@ -5,6 +5,7 @@ import useFetch from '../hooks/UseFetch'
 import { URL } from '../Api/settings'
 import { useNavigate } from 'react-router-dom'
 import useLocalStorage from '../hooks/UseLocalStorage'
+import { toast } from 'react-toastify'
 
 const Auth = () => {
     const navigate=useNavigate()
@@ -35,10 +36,15 @@ if (error && Object.keys(error).length > 0) {
   console.log("Found errors:", signUpError)
 } else {
     axiosFunction("post",URL.Auth.signUp,'','',signUpDetails).then((res)=>{
-    window.location.reload()
+        toast.success('account is created successfully')
+   
     console.log(res)
     
   }) 
+
+  setTimeout(()=>{
+     window.location.reload()
+  },500)
   console.log("No errors")
 }
     }
@@ -54,6 +60,7 @@ const onClickSignIn = async () => {
     console.log("No errors, sending API call...");
     axiosFunction("post", URL.Auth.signIn, '', '', signInDetails)
       .then((data: any) => {
+        toast.success('login successfully')
         console.log("Login response:", data.token);
         if (data.token) {
           setItem('NotesToken',data.token);

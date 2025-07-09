@@ -19,7 +19,7 @@ const FormModal = (props: any) => {
             <section className={`${props.isNotes ? 'notesContainer' : 'formContainer'}`}>
                 <img src={closeLogo} onClick={props.onclose} className='closeIcon' alt=""/>
                 <h2 className='layoutHeader'>{props.header}</h2>
-                <div className='layoutField'>
+                <div className='layoutField text-white'>
                     {props.content}
                 </div>
                 <div className='layoutButtonDiv'>

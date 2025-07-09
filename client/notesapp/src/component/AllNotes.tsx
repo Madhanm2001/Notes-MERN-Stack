@@ -11,6 +11,7 @@ import { Link, useParams } from 'react-router-dom'
 import useFetch from '../hooks/UseFetch'
 import { URL } from '../Api/settings'
 import UseValidator from '../hooks/UseValidator'
+import { toast } from 'react-toastify';
 
 
 const AllNotes: React.FC = () => {
@@ -26,6 +27,7 @@ const AllNotes: React.FC = () => {
 
   const [notesList, setNotesList] = useState([{ name: '', noteId: '', date: '', time: Date(), isPinned: false, isArchived: false }])
   const [isFilter, setIsFilter] = useState(false)
+  const[deleteShow,setDeleteShow]=useState(false)
   const [isSort, setIsSort] = useState(false)
   const [SortVal, setSortVal] = useState('')
   const [show, setShow] = useState(false)
@@ -60,6 +62,12 @@ const AllNotes: React.FC = () => {
         .then(() => {
           setNoteFilter(ps => ({ ...ps, page: 1 }));
           setShow(false)
+          if(notesId){
+            toast.info('note is updated')
+          }
+          else{
+            toast.info('note is created')
+          }
           setHasMore(true);
           if (containerRef.current) {
             containerRef.current.scrollTop = 0;
@@ -70,10 +78,14 @@ const AllNotes: React.FC = () => {
 
   const onTooglePinned = (data: any) => {
     if (data.isPinned) {
-      axiosFunction('put', URL.Note.unpinned, data.noteId, '', { isPinned: true })
+      axiosFunction('put', URL.Note.unpinned, data.noteId, '', { isPinned: true }).then(()=>{
+        toast.info('note is unpinned')
+      })
     }
     else {
-      axiosFunction('put', URL.Note.pinned, data.noteId, '', { isPinned: false })
+      axiosFunction('put', URL.Note.pinned, data.noteId, '', { isPinned: false }).then(()=>{
+        toast.info('note is pinned')
+      })
     }
     setNoteFilter(ps => ({
       ...ps,
@@ -88,9 +100,15 @@ const AllNotes: React.FC = () => {
 console.log(typeof(data.noteId),data.isArchived);
 
     if (data.isArchived) {
-    axiosFunction('put', URL.Note.unarchived, data.noteId, '', { isArchived: false });
+    axiosFunction('put', URL.Note.unarchived, data.noteId, '', { isArchived: false }).then(()=>{
+        toast.info('note is unarchived')
+
+    })
   } else {
-    axiosFunction('put', URL.Note.archived, data.noteId, '', { isArchived: true });
+    axiosFunction('put', URL.Note.archived, data.noteId, '', { isArchived: true }).then(()=>{
+        toast.info('note is archived')
+
+    })
   }
   setNoteFilter(ps => ({
       ...ps,
@@ -205,7 +223,10 @@ console.log(typeof(data.noteId),data.isArchived);
   const handleSortClick = (sortValue: any) => {
     setSortVal(sortValue);
     navigator.clipboard.writeText(sortValue)
-      .then(() => console.log("Copied:", sortValue))
+      .then(() => {
+      console.log("Copied:", sortValue)
+      toast.info('note link is copied')}
+    )
       .catch(err => console.error("Copy failed", err));
   }
 
@@ -245,10 +266,20 @@ console.log(typeof(data.noteId),data.isArchived);
   console.log(notesDetail);
 
   const onclickDelete = (data: any) => {
-    axiosFunction("delete", URL.Note.delete, data.noteId, "", "")
+    
+    setNotesId(data.noteId)
+    setDeleteShow(true)
+    
+};
+
+
+  const onDeleteConfirm = () => {
+    axiosFunction("delete", URL.Note.delete, notesId, "", "")
       .then(() => {
         setNoteFilter(ps => ({ ...ps, page: 1 }));
-        setHasMore(true);
+        toast.error('Note is Deleted')
+      setHasMore(true);
+      setDeleteShow(false)
         if (containerRef.current) {
           containerRef.current.scrollTop = 0;
         }
@@ -312,6 +343,21 @@ console.log(typeof(data.noteId),data.isArchived);
         </div>
         <p onClick={onclickClearAll} className='text-white mt-[25px] cursor-pointer hover:text-red-500'>clear all</p>
       </div>
+      <FormModal
+        show={deleteShow}
+        isNotes={false}
+        onclose={() => setDeleteShow(false)}
+        onlayoutclose={() => setDeleteShow(false)}
+        cancel={() => setDeleteShow(false)}
+        header={'Delete-Note'}
+        content='Are you sure you want to delete this note?'
+        footer={
+          <>
+            <button className='button cursor-pointer' onClick={onDeleteConfirm}>submit</button>
+            <button className='button cursor-pointer' onClick={() => setDeleteShow(!deleteShow)}>cancel</button>
+          </>
+        }
+      />
 
       <FormModal
         show={show}

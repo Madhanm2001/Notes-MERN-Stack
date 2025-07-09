@@ -10,6 +10,7 @@ import UseValidator from '../hooks/UseValidator'
 import { URL } from '../Api/settings'
 import useFetch from '../hooks/UseFetch'
 import SideBarList from './SideBarList'
+import { toast } from 'react-toastify';
 
 const Folder: React.FC = () => {
 
@@ -27,6 +28,7 @@ const[filterList,setFilterList]=useState(['All'])
    const{axiosFunction}=useFetch()
    const[searchValue,setSearchValue]=useState('')
    const [hasMore, setHasMore] = useState(true)
+   const[deleteShow,setDeleteShow]=useState(false)
   const containerRef = useRef<HTMLUListElement>(null);
 
    const navigate=useNavigate()
@@ -49,6 +51,12 @@ const onSubmitFolder = () => {
   if (Object.keys(error).length === 0) {
     axiosFunction(params ? 'put' : "post", URL.Folder.create, params, '', folderDetail)
       .then(() => {
+        if(folderId){
+        toast.info("Folder updated successfully!")
+        }
+        else{
+        toast.info("Folder created successfully!")
+        }
   setFolderFilter(ps => ({ ...ps, page: 1 }));
   setShow(false)
   setHasMore(true);
@@ -60,15 +68,27 @@ const onSubmitFolder = () => {
 }
 
 const onclickDelete = (data: any) => {
-  axiosFunction("delete", URL.Folder.create, data.folderId, "", "")
+    
+    setFolderId(data.folderId)
+    setDeleteShow(true)
+    console.log(folderId,'folderId');
+    
+};
+
+const onDeleteConfirm=()=>{
+
+  axiosFunction("delete", URL.Folder.create,folderId, "", "")
     .then(() => {
       setFolderFilter(ps => ({ ...ps, page: 1 }));
+      toast.error('Folder is Deleted')
       setHasMore(true);
+      setDeleteShow(false)
       if (containerRef.current) {
         containerRef.current.scrollTop = 0;
       }
     });
-};
+
+}
 
    const TimeFormat=(time:any)=>{
 
@@ -239,8 +259,24 @@ setIsFilter(false)
         </>}
         footer={
           <>
-            <button className='button' onClick={onSubmitFolder}>submit</button>
-            <button className='button' onClick={() => setShow(!show)}>cancel</button>
+            <button className='button cursor-pointer' onClick={onSubmitFolder}>submit</button>
+            <button className='button cursor-pointer' onClick={() => setShow(!show)}>cancel</button>
+          </>
+        }
+      />
+
+      <FormModal
+        show={deleteShow}
+        isNotes={false}
+        onclose={() => setDeleteShow(false)}
+        onlayoutclose={() => setDeleteShow(false)}
+        cancel={() => setDeleteShow(false)}
+        header={'Delete-Folder'}
+        content='Are you sure you want to delete this folder?'
+        footer={
+          <>
+            <button className='button cursor-pointer' onClick={onDeleteConfirm}>submit</button>
+            <button className='button cursor-pointer' onClick={() => setDeleteShow(!deleteShow)}>cancel</button>
           </>
         }
       />
