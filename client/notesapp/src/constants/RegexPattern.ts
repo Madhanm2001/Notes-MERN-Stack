@@ -1,6 +1,6 @@
 const pattern: any = {
   EMAIL: /^[a-zA-Z0-9._%+-]{3,}@[a-zA-Z]{3,}\.[a-zA-Z]{2,}$/,
-  USER_NAME: /^[a-zA-Z0-9_-]{3,15}$/,
+  USER_NAME: /^[a-zA-Z0-9._-]{3,15}$/,
   FOLDER_NAME:/^[a-zA-Z0-9\s_-]{3,}$/,
   FOLDER_CATEGORY:/^[a-zA-Z0-9\s_-]{3,15}$/,
   NAME: /^[a-zA-Z\s.]{3,50}$/,
