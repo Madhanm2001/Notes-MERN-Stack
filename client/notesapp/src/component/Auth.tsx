@@ -61,13 +61,15 @@ const onClickSignIn = async () => {
     console.log("No errors, sending API call...");
     axiosFunction("post", URL.Auth.signIn, '', '', signInDetails)
       .then((data: any) => {
-        toast.success('login successfully')
-        console.log("Login response:", data.token);
+        console.log("Login response:", data.message);
         if (data.token) {
+          toast.success('login successfully')
           setItem('NotesToken',data.token);
           navigate('/');
         }
-        else{
+        console.log(data);
+        
+        if(data){
          setSignInError(ps => ({
           ...ps,
           invalid: 'invalid, username or email'
