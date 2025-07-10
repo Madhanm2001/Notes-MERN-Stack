@@ -67,16 +67,14 @@ const onClickSignIn = async () => {
           setItem('NotesToken',data.token);
           navigate('/');
         }
-        console.log(data);
         
-        if(data){
+        else if(data){
          setSignInError(ps => ({
           ...ps,
           invalid: 'invalid, username or email'
         }));
         }
         
-        console.log(data);
       })
       .catch(err => {
         console.log("API error:", err.response?.data?.message);
