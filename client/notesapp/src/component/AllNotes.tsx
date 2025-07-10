@@ -19,7 +19,7 @@ const AllNotes: React.FC = () => {
   const { id } = useParams()
   const { axiosFunction } = useFetch()
   const navigate = useNavigate()
-  const [noteFilter, setNoteFilter] = useState({ page: 1, category: '', sort: 'newtoold', limit: 10 })
+  const [noteFilter, setNoteFilter] = useState({ page: 1, category: 'all', sort: 'newtoold', limit: 10 })
 
   useEffect(() => {
     console.log(id);
@@ -28,7 +28,7 @@ const AllNotes: React.FC = () => {
 
   const [notesList, setNotesList] = useState([{ name: '', noteId: '', date: '', time: Date(), isPinned: false, isArchived: false }])
   const [isFilter, setIsFilter] = useState(false)
-  const[deleteShow,setDeleteShow]=useState(false)
+  const [deleteShow, setDeleteShow] = useState(false)
   const [isSort, setIsSort] = useState(false)
   const [SortVal, setSortVal] = useState('')
   const [show, setShow] = useState(false)
@@ -64,10 +64,10 @@ const AllNotes: React.FC = () => {
         .then(() => {
           setNoteFilter(ps => ({ ...ps, page: 1 }));
           setShow(false)
-          if(notesId){
+          if (notesId) {
             toast.info('note is updated')
           }
-          else{
+          else {
             toast.info('note is created')
           }
           setHasMore(true);
@@ -80,42 +80,48 @@ const AllNotes: React.FC = () => {
 
   const onTooglePinned = (data: any) => {
     if (data.isPinned) {
-      axiosFunction('put', URL.Note.unpinned, data.noteId, '', { isPinned: true }).then(()=>{
+      axiosFunction('put', URL.Note.unpinned, data.noteId, '', { isPinned: true }).then(() => {
+        setNoteFilter(ps => ({
+          ...ps,
+          page: 1
+        }))
         toast.info('note is unpinned')
       })
     }
     else {
-      axiosFunction('put', URL.Note.pinned, data.noteId, '', { isPinned: false }).then(()=>{
+      axiosFunction('put', URL.Note.pinned, data.noteId, '', { isPinned: false }).then(() => {
+        setNoteFilter(ps => ({
+          ...ps,
+          page: 1
+        }))
         toast.info('note is pinned')
       })
     }
-    setNoteFilter(ps => ({
-      ...ps,
-      page: 1
-    }))
     setHasMore(true);
     if (containerRef.current) {
       containerRef.current.scrollTop = 0;
     }
   }
   const onToogleArchived = (data: any) => {
-console.log(typeof(data.noteId),data.isArchived);
+    console.log(typeof (data.noteId), data.isArchived);
 
     if (data.isArchived) {
-    axiosFunction('put', URL.Note.unarchived, data.noteId, '', { isArchived: false }).then(()=>{
+      axiosFunction('put', URL.Note.unarchived, data.noteId, '', { isArchived: false }).then(() => {
+        setNoteFilter(ps => ({
+          ...ps,
+          page: 1
+        }))
         toast.info('note is unarchived')
-
-    })
-  } else {
-    axiosFunction('put', URL.Note.archived, data.noteId, '', { isArchived: true }).then(()=>{
+      })
+    } else {
+      axiosFunction('put', URL.Note.archived, data.noteId, '', { isArchived: true }).then(() => {
+        setNoteFilter(ps => ({
+          ...ps,
+          page: 1
+        }))
         toast.info('note is archived')
-
-    })
-  }
-  setNoteFilter(ps => ({
-      ...ps,
-      page: 1
-    }))
+      })
+    }
     setHasMore(true);
     if (containerRef.current) {
       containerRef.current.scrollTop = 0;
@@ -158,8 +164,8 @@ console.log(typeof(data.noteId),data.isArchived);
           date: TimeFormat(data.updatedAt).date,
           time: TimeFormat(data.updatedAt).time,
           noteId: data.noteId,
-          isPinned:data.isPinned,
-          isArchived:data.isArchived
+          isPinned: data.isPinned,
+          isArchived: data.isArchived
         }))
         if (noteFilter.page > 1) {
           setNotesList(prev => [...prev, ...note])
@@ -183,8 +189,8 @@ console.log(typeof(data.noteId),data.isArchived);
           date: TimeFormat(data.updatedAt).date,
           time: TimeFormat(data.updatedAt).time,
           noteId: data.noteId,
-          isPinned:data.isPinned,
-          isArchived:data.isArchived
+          isPinned: data.isPinned,
+          isArchived: data.isArchived
         }))
         if (noteFilter.page > 1) {
           setNotesList(prev => [...prev, ...note])
@@ -219,16 +225,17 @@ console.log(typeof(data.noteId),data.isArchived);
       setNotesDetail({ name: res.name, content: res.content })
       setShow(true)
     })
-    
+
   }
 
   const handleSortClick = (sortValue: any) => {
     setSortVal(sortValue);
     navigator.clipboard.writeText(sortValue)
       .then(() => {
-      console.log("Copied:", sortValue)
-      toast.info('note link is copied')}
-    )
+        console.log("Copied:", sortValue)
+        toast.info('note link is copied')
+      }
+      )
       .catch(err => console.error("Copy failed", err));
   }
 
@@ -246,25 +253,25 @@ console.log(typeof(data.noteId),data.isArchived);
     const value = e.target.value;
     setSearchValue(value);
     setIsFilter(false)
-    setNoteFilter(ps=>({
+    setNoteFilter(ps => ({
       ...ps,
-      category:'all',
-      sort:'newtoold'
+      category: 'all',
+      sort: 'newtoold'
     }))
     setIsSort(false)
     setTimeout(() => {
       if (value.trim()) {
         axiosFunction("get", id ? URL.Note.searchByFolder : URL.Note.searchAll, id, { name: value }, "")
           .then((res) => {
-            const folder = res?.map((data: any) => ({
+            const notes = res?.map((data: any) => ({
               name: data.name,
               date: TimeFormat(data.updatedAt).date,
               time: TimeFormat(data.updatedAt).time,
               noteId: data.noteId,
-              isArchived:data.isArchived,
-              isPinned:data.isPinned,
+              isArchived: data.isArchived,
+              isPinned: data.isPinned,
             }))
-            setNotesList(folder);
+            setNotesList(notes);
           })
       }
     }, 200)
@@ -277,22 +284,22 @@ console.log(typeof(data.noteId),data.isArchived);
   console.log(notesDetail);
 
   const onclickDelete = (data: any) => {
-    
+
     setNotesId(data.noteId)
     setDeleteShow(true)
-    
-};
+
+  };
 
 
   const onDeleteConfirm = () => {
-    console.log(notesId,'folderId');
-    
+    console.log(notesId, 'folderId');
+
     axiosFunction("delete", URL.Note.delete, notesId, "", "")
       .then(() => {
         setNoteFilter(ps => ({ ...ps, page: 1 }));
         toast.error('Note is Deleted')
-      setHasMore(true);
-      setDeleteShow(false)
+        setHasMore(true);
+        setDeleteShow(false)
         if (containerRef.current) {
           containerRef.current.scrollTop = 0;
         }
@@ -301,7 +308,7 @@ console.log(typeof(data.noteId),data.isArchived);
 
   const onclickClearAll = () => {
     setNoteFilter({
-      category: "",
+      category: "all",
       sort: "newtoold",
       limit: 10,
       page: 1
@@ -334,7 +341,7 @@ console.log(typeof(data.noteId),data.isArchived);
 
   return (
     <div>
-{id&&<div className='text-[white] flex justify-end m-[30px] text-[15px] cursor-pointer ' onClick={() => { navigate(-1) }}>{'< back to folders'}</div>}
+      {id && <div className='text-[white] flex justify-end m-[30px] text-[15px] cursor-pointer ' onClick={() => { navigate(-1) }}>{'< back to folders'}</div>}
       <div className='flex flex-wrap justify-between m-[25px] relative'>
 
         <AllFolders />
@@ -348,10 +355,9 @@ console.log(typeof(data.noteId),data.isArchived);
               onChange={onclickSearch}
             />
             <img
-              className='h-[10px] w-[10px] mt-[25px] p-[0_10px] h-[35px] w-[35px] p-[8px] bg-[#313131] rounded'
+              className='h-[10px] w-[10px] mt-[25px] p-[0_10px] h-[35px] w-[35px] p-[8px] bg-[#313131] rounded cursor-pointer'
               src={searchLogo}
               alt=""
-              onClick={onclickSearch}
             />
           </span>
         </div>
@@ -378,7 +384,7 @@ console.log(typeof(data.noteId),data.isArchived);
         onclose={() => setShow(false)}
         onlayoutclose={() => setShow(false)}
         cancel={() => setShow(false)}
-        header={notesId?'Update-Notes':'Create-Notes'}
+        header={notesId ? 'Update-Notes' : 'Create-Notes'}
         content={<>
           <div className='layoutField'>
             <label htmlFor="" className='layoutLabel'>Title:</label>
@@ -445,8 +451,8 @@ console.log(typeof(data.noteId),data.isArchived);
             <div className="shadow rounded flex ">
               <FontAwesomeIcon
                 icon={faThumbtack}
-                onClick={()=>onTooglePinned(data)}
-                className={`${data.isPinned ? 'text-[#00809f]' : "text-[#878787]"} hover:text-blue-500 transition-colors duration-300 ms-auto`}
+                onClick={() => onTooglePinned(data)}
+                className={`${data.isPinned ? 'text-[#00809f]' : "text-[#878787]"} hover:text-blue-500 transition-colors duration-300 ms-auto cursor-pointer`}
                 style={{ transform: "rotate(45deg)" }}
               />
             </div>
@@ -455,7 +461,7 @@ console.log(typeof(data.noteId),data.isArchived);
             <div className='flex justify-center gap-[25px] my-[25px]'>
               <FontAwesomeIcon icon={faTrash} className='text-[#878787] hover:text-red-500 cursor-pointer' onClick={() => onclickDelete(data)} />
               <FontAwesomeIcon icon={faEdit} className='text-[#878787] hover:text-yellow-500 cursor-pointer' onClick={() => onclickEdit(data)} />
-              <FontAwesomeIcon icon={faArchive} className={`${data.isArchived?'text-[#cf8000]':'text-[#878787]'} hover:text-orange-500 cursor-pointer`} onClick={() => onToogleArchived(data)}/>
+              <FontAwesomeIcon icon={faArchive} className={`${data.isArchived ? 'text-[#cf8000]' : 'text-[#878787]'} hover:text-orange-500 cursor-pointer`} onClick={() => onToogleArchived(data)} />
               <FontAwesomeIcon icon={faCopy} onClick={() => handleSortClick(`localhost:5173/notes-view/${data.noteId}`)} className='text-[#878787] hover:text-green-500 cursor-pointer' />
             </div>
             <p className='text-[#878787] text-[13px] flex justify-center gap-[10px] '><span><FontAwesomeIcon className='text-[#878787]' icon={faClock} /></span>{`${data?.date}, ${data?.time}`}</p>

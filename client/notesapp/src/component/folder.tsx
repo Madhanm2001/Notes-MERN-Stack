@@ -52,10 +52,10 @@ const onSubmitFolder = () => {
     axiosFunction(params ? 'put' : "post", URL.Folder.create, params, '', folderDetail)
       .then(() => {
         if(folderId){
-        toast.info("Folder updated successfully!")
+        toast.info("Folder is updated")
         }
         else{
-        toast.info("Folder created successfully!")
+        toast.info("Folder is created")
         }
   setFolderFilter(ps => ({ ...ps, page: 1 }));
   setShow(false)
@@ -105,6 +105,7 @@ const onDeleteConfirm=()=>{
    }
   
     const onClickFilter=(e:string|any)=>{
+      setSearchValue('')
       setFolderFilter(ps=>({
         ...ps,
         category:e.target.value,
@@ -127,6 +128,7 @@ const onDeleteConfirm=()=>{
 
     }
     const onclickSort = (sort: any) => {
+      setSearchValue('')
   setFolderFilter(ps => ({
     ...ps,
     sort: sort,
@@ -207,7 +209,7 @@ const onDeleteConfirm=()=>{
     setIsFilter(false)
     setFolderFilter(ps=>({
       ...ps,
-      category:'all',
+      category:'',
       sort:'newtoold'
     }))
     setIsSort(false)
@@ -295,9 +297,8 @@ const onDeleteConfirm=()=>{
               onChange={onclickSearch}
             />
             <img
-              className='h-[10px] w-[10px] mt-[25px] h-[35px] w-[35px] p-[8px] bg-[#313131] rounded'
+              className='h-[10px] w-[10px] mt-[25px] h-[35px] w-[35px] p-[8px] bg-[#313131] rounded cursor-pointer'
               src={searchLogo}
-              onClick={onclickSearch}
               alt=""
             />
           </span>

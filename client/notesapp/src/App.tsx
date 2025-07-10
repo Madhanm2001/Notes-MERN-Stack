@@ -31,7 +31,7 @@ function App() {
         <Route path='/notes-view/:id?' element={<NotesShare />} />
       </Routes>
       <ToastContainer
-            position="top-left"
+            position="top-center"
             autoClose={1000}
             hideProgressBar
             newestOnTop

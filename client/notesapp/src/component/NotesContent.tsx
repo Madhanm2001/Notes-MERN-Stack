@@ -71,30 +71,30 @@ const NotesContent = () => {
 
     if (data.isPinned) {
           axiosFunction('put', URL.Note.unpinned, id, '', { isPinned: true }).then(()=>{
+            fetchNotes()
             toast.info('note is unpinned')
           })
         }
         else {
           axiosFunction('put', URL.Note.pinned, id, '', { isPinned: false }).then(()=>{
+            fetchNotes()
             toast.info('note is pinned')
           })
         }
-    fetchNotes()
   }
   const onToogleArchived = (data: any) => {
 
     if (data.isArchived) {
         axiosFunction('put', URL.Note.unarchived, id, '', { isArchived: false }).then(()=>{
+            fetchNotes()
             toast.info('note is unarchived')
-    
         })
       } else {
         axiosFunction('put', URL.Note.archived, id, '', { isArchived: true }).then(()=>{
+            fetchNotes()
             toast.info('note is archived')
         })
       }
-    fetchNotes()
-
   }
   const onchangeNoteName = (e: any) => {
 
@@ -130,6 +130,7 @@ const NotesContent = () => {
     if (Object.keys(error).length === 0) {
       axiosFunction('put', URL.Note.update, params || id, '', notesDetail)
         .then(() => {
+          toast.info('note is updated')
           fetchNotes()
           setShow(false)
         })
