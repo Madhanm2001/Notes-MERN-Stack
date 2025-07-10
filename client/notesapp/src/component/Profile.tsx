@@ -173,7 +173,7 @@ if(Object.keys(error).length==0){
             <button className='button' onClick={()=>setChangePass(!showChangePass)}>cancel</button>
           </>
         }/>
-  {isLoading ?
+  {isLoading || isSearchLoading?
           <div className="flex justify-center items-center p-10 w-full text-[]">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
