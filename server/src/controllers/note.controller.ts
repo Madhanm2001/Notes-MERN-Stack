@@ -227,7 +227,7 @@ export const searchAllNotes: any = async (req: Request, res: Response) => {
             name: { $regex: name, $options: 'i' },
             userId: decode.userId,
             isDeleted:false
-        }).select('name noteId updatedAt -_id')
+        }).select('name noteId updatedAt isPinned isArchived -_id')
 
         console.log(notes);
 

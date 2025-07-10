@@ -204,7 +204,13 @@ const onDeleteConfirm=()=>{
       const onclickSearch = (e: any) => {
     const value = e.target.value;
     setSearchValue(value);
-setIsFilter(false)
+    setIsFilter(false)
+    setFolderFilter(ps=>({
+      ...ps,
+      category:'all',
+      sort:'newtoold'
+    }))
+    setIsSort(false)
     setTimeout(() => {
         if (value.trim()) {
             axiosFunction("get", URL.Folder.search, '', { name: value }, "")

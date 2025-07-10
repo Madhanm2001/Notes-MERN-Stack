@@ -170,7 +170,7 @@ if(Object.keys(error).length==0){
     <div className="flex flex-col gap-[30px] items-center w-full">
       <div className="flex flex-col items-center flex-wrap">
         <div className="text-black font-bold flex items-center justify-center rounded-full truncate w-[120px] h-[120px] bg-[#e5d700] text-[50px]">
-          {profileData?.profile?.username[0]}
+          {profileData?.profile?.name?.[0]?.toUpperCase()}
         </div>
         <p className="text-[#e5d700] font-bold text-center truncate mt-3 text-[20px]">{profileData?.profile?.username}</p>
       </div>

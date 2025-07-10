@@ -49,6 +49,7 @@ const AllNotes: React.FC = () => {
       page: 1
     }))
     setHasMore(true)
+    setSearchValue('')
     if (containerRef.current) {
       containerRef.current.scrollTop = 0;
     }
@@ -236,6 +237,7 @@ console.log(typeof(data.noteId),data.isArchived);
       sort: sort,
       page: 1
     }));
+    setSearchValue('')
     setHasMore(true);
   }
 
@@ -243,15 +245,23 @@ console.log(typeof(data.noteId),data.isArchived);
     const value = e.target.value;
     setSearchValue(value);
     setIsFilter(false)
+    setNoteFilter(ps=>({
+      ...ps,
+      category:'all',
+      sort:'newtoold'
+    }))
+    setIsSort(false)
     setTimeout(() => {
       if (value.trim()) {
-        axiosFunction("get", id ? URL.Note.searchByFolder : URL.Note.searchAll, id ? id : '', { name: value }, "")
+        axiosFunction("get", id ? URL.Note.searchByFolder : URL.Note.searchAll, id, { name: value }, "")
           .then((res) => {
             const folder = res?.map((data: any) => ({
               name: data.name,
               date: TimeFormat(data.updatedAt).date,
               time: TimeFormat(data.updatedAt).time,
-              notesId: data.folderId
+              noteId: data.noteId,
+              isArchived:data.isArchived,
+              isPinned:data.isPinned,
             }))
             setNotesList(folder);
           })
@@ -274,6 +284,8 @@ console.log(typeof(data.noteId),data.isArchived);
 
 
   const onDeleteConfirm = () => {
+    console.log(notesId,'folderId');
+    
     axiosFunction("delete", URL.Note.delete, notesId, "", "")
       .then(() => {
         setNoteFilter(ps => ({ ...ps, page: 1 }));
