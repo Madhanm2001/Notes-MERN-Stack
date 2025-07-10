@@ -31,18 +31,20 @@ function App() {
         <Route path='/notes-view/:id?' element={<NotesShare />} />
       </Routes>
       <ToastContainer
-            position="top-center"
-            autoClose={1000}
-            hideProgressBar
-            newestOnTop
-            closeOnClick={false}
-            rtl
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover={false}
-            theme="colored"
-            transition={Slide}
-          />
+  position="top-right"
+  autoClose={2000}
+  hideProgressBar
+  newestOnTop
+  closeOnClick={false}
+  rtl
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover={false}
+  theme="colored"
+  transition={Slide}
+  closeButton={false}
+/>
+
     </QueryClientProvider>
   </BrowserRouter>
 </>

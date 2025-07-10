@@ -18,6 +18,7 @@ const NotesContent = () => {
   const [notesId, setNotesId] = useState('')
   const { axiosFunction } = useFetch()
   const [show, setShow] = useState(false)
+  const [isSearchLoading, setIsSearchLoading] = useState(false)
   const [notesDetail, setNotesDetail] = useState({ name: '', content: '', date: '', time: '', isArchived: false, isPinned: false, noteId: id })
   const [notesContent, setNotesContent] = useState({ name: '', content: '', date: '', time: '', isArchived: false, isPinned: false, noteId: id })
   const [noteErr, setNoteErr] = useState({ name: '', content: '' })
@@ -60,6 +61,8 @@ const NotesContent = () => {
 
 
   const onDeleteConfirm = () => {
+      setIsSearchLoading(true)
+
     axiosFunction("delete", URL.Note.delete, id, "", "")
       .then(() => {
         toast.error('Note is Deleted')
@@ -68,6 +71,7 @@ const NotesContent = () => {
   };
 
   const onTooglePinned = (data: any) => {
+  setIsSearchLoading(true)
 
     if (data.isPinned) {
           axiosFunction('put', URL.Note.unpinned, id, '', { isPinned: true }).then(()=>{
@@ -83,6 +87,8 @@ const NotesContent = () => {
         }
   }
   const onToogleArchived = (data: any) => {
+      setIsSearchLoading(true)
+
 
     if (data.isArchived) {
         axiosFunction('put', URL.Note.unarchived, id, '', { isArchived: false }).then(()=>{
@@ -119,11 +125,15 @@ const NotesContent = () => {
   const fetchNotes = () => {
 
     axiosFunction("get", URL.Note.get, id, "", "").then((res) => {
+        setIsSearchLoading(false)
+
       setNotesContent({ name: res.name, content: res.content, date: TimeFormat(res.updatedAt).date, time: TimeFormat(res.updatedAt).time, isArchived: res.isArchived, isPinned: res.isPinned, noteId: id })
     })
   }
 
   const onSubmitNote = () => {
+      setIsSearchLoading(true)
+
     const error = noteValidator(notesDetail) || {}
     const params = notesId || "";
     setNoteErr(error)
@@ -191,7 +201,11 @@ const NotesContent = () => {
         <div className='text-[white] mt-[30px] text-[15px] cursor-pointer' onClick={() => { navigate(-1) }}>{'< back to notes'}</div>
       </div>
 
-      <div className='flex flex-col justify-center items-center h-screen'>
+      {isSearchLoading ?
+          <div className="flex justify-center items-center p-10 w-full text-[]">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+          : <div className='flex flex-col justify-center items-center h-screen'>
         <div className='bg-[#3c3c3c] max-[500px]:flex-start max-[500px]:h-[30%] h-[20%] w-[80%] p-5 m-3 my-auto rounded flex justify-between flex-wrap gap-[15px]'>
           <div className='my-auto'>
             <div className='flex gap-10'><h1 className='font-bold truncate w-[110px] text-white'>{notesContent.name}</h1>{notesContent.isArchived && <span className='text-[10px] mt-[8px] bg-[#cdca00] font-bold rounded-full px-[10px]'>Archived</span>}</div>
@@ -216,7 +230,7 @@ const NotesContent = () => {
         <div className='bg-[#3c3c3c] h-[60%] w-[80%] p-5 m-3 rounded text-white overflow-y-scroll hide-scrollbar' dangerouslySetInnerHTML={{ __html: notesContent.content }}>
 
         </div>
-      </div>
+      </div>}
     </div>
   )
 }

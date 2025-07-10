@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 const Profile = () => {
   const [showProfile, setShowProfile] = useState(false)
   const [showChangePass, setChangePass] = useState(false)
+    const [isSearchLoading, setIsSearchLoading] = useState(false)
   const [profileDetail,setProfileDetail]=useState({name:'',username:'',phoneNumber:'',email:''})
   const{ axiosFunction } = useFetch()
   const[profileErr,setProfileErr]=useState({name:'',username:'',phoneNumber:'',email:''})
@@ -61,6 +62,7 @@ const { data: profileData, isLoading, isError } = useQuery({
 
 const error = ChangePasswordValidator(changePassDetail) || {}
 setChangePassErr(error)
+setIsSearchLoading(true)
 
 if(Object.keys(error).length==0){
 
@@ -77,6 +79,7 @@ if(Object.keys(error).length==0){
       else{
         toast.info('password is changed')
 setChangePass(false)
+setIsSearchLoading(false)
       }
       
     })
@@ -89,6 +92,7 @@ setChangePass(false)
 
 const error = profileValidator(profileDetail) || {}
 setProfileErr(error)
+setIsSearchLoading(true)
 
 if(Object.keys(error).length==0){
 
@@ -96,10 +100,13 @@ if(Object.keys(error).length==0){
     .then(()=>{
       toast.info('profile is edited')
       setShowProfile(false)
+      setIsSearchLoading(false)
     })
 
 }
   }
+  console.log(isLoading,"isLoading");
+  
   
   return (
     <div className="flex justify-center items-center h-screen">
@@ -166,7 +173,11 @@ if(Object.keys(error).length==0){
             <button className='button' onClick={()=>setChangePass(!showChangePass)}>cancel</button>
           </>
         }/>
-  <div className="flex justify-center gap-2.5 bg-[black] shadow-[0px_0px_10px_0px_#989898] min-[850px]:w-[50%] min-[990px]:w-[40%] min-[650px]:w-[60%] min-[500px]:w-[70%] w-[90%] p-[2em] rounded-[10px]">
+  {isLoading ?
+          <div className="flex justify-center items-center p-10 w-full text-[]">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+          : <div className="flex justify-center gap-2.5 bg-[black] shadow-[0px_0px_10px_0px_#989898] min-[850px]:w-[50%] min-[990px]:w-[40%] min-[650px]:w-[60%] min-[500px]:w-[70%] w-[90%] p-[2em] rounded-[10px]">
     <div className="flex flex-col gap-[30px] items-center w-full">
       <div className="flex flex-col items-center flex-wrap">
         <div className="text-black font-bold flex items-center justify-center rounded-full truncate w-[120px] h-[120px] bg-[#e5d700] text-[50px]">
@@ -191,7 +202,7 @@ if(Object.keys(error).length==0){
         <span className="text-white text-[15px] underline cursor-pointer" onClick={getProfile}>edit profile</span>
       </div>
     </div>
-  </div>
+  </div>}
 </div>
 
   )

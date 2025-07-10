@@ -22,6 +22,11 @@ const AllNotes: React.FC = () => {
   const [noteFilter, setNoteFilter] = useState({ page: 1, category: 'all', sort: 'newtoold', limit: 10 })
 
   useEffect(() => {
+  const token = localStorage.getItem('NotesToken')
+  if (!token) {
+    navigate('/auth')
+  }
+    // setIsSearchLoading(true)
     console.log(id);
     fetchNotes()
   }, [noteFilter])
@@ -30,6 +35,7 @@ const AllNotes: React.FC = () => {
   const [isFilter, setIsFilter] = useState(false)
   const [deleteShow, setDeleteShow] = useState(false)
   const [isSort, setIsSort] = useState(false)
+  const [isSearchLoading, setIsSearchLoading] = useState(false)
   const [SortVal, setSortVal] = useState('')
   const [show, setShow] = useState(false)
   const [notesId, setNotesId] = useState('')
@@ -44,6 +50,7 @@ const AllNotes: React.FC = () => {
 
 
   const onClickFilter = (data: string) => {
+    setIsSearchLoading(true)
     setNoteFilter(ps => ({
       ...ps,
       category: data,
@@ -79,6 +86,7 @@ const AllNotes: React.FC = () => {
   }
 
   const onTooglePinned = (data: any) => {
+    setIsSearchLoading(true)
     if (data.isPinned) {
       axiosFunction('put', URL.Note.unpinned, data.noteId, '', { isPinned: true }).then(() => {
         setNoteFilter(ps => ({
@@ -104,7 +112,7 @@ const AllNotes: React.FC = () => {
   }
   const onToogleArchived = (data: any) => {
     console.log(typeof (data.noteId), data.isArchived);
-
+setIsSearchLoading(true)
     if (data.isArchived) {
       axiosFunction('put', URL.Note.unarchived, data.noteId, '', { isArchived: false }).then(() => {
         setNoteFilter(ps => ({
@@ -167,6 +175,7 @@ const AllNotes: React.FC = () => {
           isPinned: data.isPinned,
           isArchived: data.isArchived
         }))
+        setIsSearchLoading(false)
         if (noteFilter.page > 1) {
           setNotesList(prev => [...prev, ...note])
         } else {
@@ -183,7 +192,8 @@ const AllNotes: React.FC = () => {
         sort: noteFilter.sort,
         page: noteFilter.page,
         limit: noteFilter.limit
-      }, '').then((res) => {
+      }, '')
+      .then((res) => {
         const note = res?.notes.map((data: any) => ({
           name: data.name,
           date: TimeFormat(data.updatedAt).date,
@@ -192,6 +202,7 @@ const AllNotes: React.FC = () => {
           isPinned: data.isPinned,
           isArchived: data.isArchived
         }))
+        setIsSearchLoading(false)
         if (noteFilter.page > 1) {
           setNotesList(prev => [...prev, ...note])
         } else {
@@ -200,6 +211,9 @@ const AllNotes: React.FC = () => {
         if (note.length < noteFilter.limit) {
           setHasMore(false)
         }
+      })
+      .catch(()=>{
+        setIsSearchLoading(false)
       })
     }
 
@@ -240,6 +254,7 @@ const AllNotes: React.FC = () => {
   }
 
   const onclickSort = (sort: any) => {
+    setIsSearchLoading(true)
     setNoteFilter(ps => ({
       ...ps,
       sort: sort,
@@ -250,6 +265,7 @@ const AllNotes: React.FC = () => {
   }
 
   const onclickSearch = (e: any) => {
+    setIsSearchLoading(e.target.value ? true : false)
     const value = e.target.value;
     setSearchValue(value);
     setIsFilter(false)
@@ -272,6 +288,7 @@ const AllNotes: React.FC = () => {
               isPinned: data.isPinned,
             }))
             setNotesList(notes);
+            setIsSearchLoading(false)
           })
       }
     }, 200)
@@ -293,7 +310,7 @@ const AllNotes: React.FC = () => {
 
   const onDeleteConfirm = () => {
     console.log(notesId, 'folderId');
-
+    setIsSearchLoading(true)
     axiosFunction("delete", URL.Note.delete, notesId, "", "")
       .then(() => {
         setNoteFilter(ps => ({ ...ps, page: 1 }));
@@ -307,6 +324,7 @@ const AllNotes: React.FC = () => {
   };
 
   const onclickClearAll = () => {
+    setIsSearchLoading(true)
     setNoteFilter({
       category: "all",
       sort: "newtoold",
@@ -446,29 +464,33 @@ const AllNotes: React.FC = () => {
       {/* <h3 className='text-center text-white font-sans font-weight-[4vh] m-[2.5vh] text-[4vh]'>Folders</h3> */}
 
       <ul id='notes' ref={containerRef} onScroll={handleScroll} className='max-h-[100vh] overflow-y-auto max-sm:justify-center p-1 overflow-y-scroll hide-scrollbar'>
-        {notesList.length > 0 ? notesList?.map((data, id) => {
-          return (<li key={id} className='shadow-[0px_0px_10px_2px_#989898] p-[25px] rounded-[10px] my-[10px] w-[201px] hover:scale-[1.02]'>
-            <div className="shadow rounded flex ">
-              <FontAwesomeIcon
-                icon={faThumbtack}
-                onClick={() => onTooglePinned(data)}
-                className={`${data.isPinned ? 'text-[#00809f]' : "text-[#878787]"} hover:text-blue-500 transition-colors duration-300 ms-auto cursor-pointer`}
-                style={{ transform: "rotate(45deg)" }}
-              />
-            </div>
+        {isSearchLoading ?
+          <div className="flex justify-center items-center p-10 w-full text-[]">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+          : notesList.length > 0 ? notesList?.map((data, id) => {
+            return (<li key={id} className='shadow-[0px_0px_10px_2px_#989898] p-[25px] rounded-[10px] my-[10px] w-[201px] hover:scale-[1.02]'>
+              <div className="shadow rounded flex ">
+                <FontAwesomeIcon
+                  icon={faThumbtack}
+                  onClick={() => onTooglePinned(data)}
+                  className={`${data.isPinned ? 'text-[#00809f]' : "text-[#878787]"} hover:text-blue-500 transition-colors duration-300 ms-auto cursor-pointer`}
+                  style={{ transform: "rotate(45deg)" }}
+                />
+              </div>
 
-            <Link to={`/notes-content/${data.noteId}`}><img className='mx-auto my-[8px] cursor-pointer' id='noteslogo' src={appLogo} alt="" /><p id='folderName' className='text-center truncate w-full cursor-pointer'>{data.name}</p></Link>
-            <div className='flex justify-center gap-[25px] my-[25px]'>
-              <FontAwesomeIcon icon={faTrash} className='text-[#878787] hover:text-red-500 cursor-pointer' onClick={() => onclickDelete(data)} />
-              <FontAwesomeIcon icon={faEdit} className='text-[#878787] hover:text-yellow-500 cursor-pointer' onClick={() => onclickEdit(data)} />
-              <FontAwesomeIcon icon={faArchive} className={`${data.isArchived ? 'text-[#cf8000]' : 'text-[#878787]'} hover:text-orange-500 cursor-pointer`} onClick={() => onToogleArchived(data)} />
-              <FontAwesomeIcon icon={faCopy} onClick={() => handleSortClick(`localhost:5173/notes-view/${data.noteId}`)} className='text-[#878787] hover:text-green-500 cursor-pointer' />
-            </div>
-            <p className='text-[#878787] text-[13px] flex justify-center gap-[10px] '><span><FontAwesomeIcon className='text-[#878787]' icon={faClock} /></span>{`${data?.date}, ${data?.time}`}</p>
-          </li>)
-        }) : (
-          <h1 className='text-white mx-auto font-bold text-[25px]'>No Result Found</h1>
-        )}
+              <Link to={`/notes-content/${data.noteId}`}><img className='mx-auto my-[8px] cursor-pointer' id='noteslogo' src={appLogo} alt="" /><p id='folderName' className='text-center truncate w-full cursor-pointer'>{data.name}</p></Link>
+              <div className='flex justify-center gap-[25px] my-[25px]'>
+                <FontAwesomeIcon icon={faTrash} className='text-[#878787] hover:text-red-500 cursor-pointer' onClick={() => onclickDelete(data)} />
+                <FontAwesomeIcon icon={faEdit} className='text-[#878787] hover:text-yellow-500 cursor-pointer' onClick={() => onclickEdit(data)} />
+                <FontAwesomeIcon icon={faArchive} className={`${data.isArchived ? 'text-[#cf8000]' : 'text-[#878787]'} hover:text-orange-500 cursor-pointer`} onClick={() => onToogleArchived(data)} />
+                <FontAwesomeIcon icon={faCopy} onClick={() => handleSortClick(`localhost:5173/notes-view/${data.noteId}`)} className='text-[#878787] hover:text-green-500 cursor-pointer' />
+              </div>
+              <p className='text-[#878787] text-[13px] flex justify-center gap-[10px] '><span><FontAwesomeIcon className='text-[#878787]' icon={faClock} /></span>{`${data?.date}, ${data?.time}`}</p>
+            </li>)
+          }) : (
+            <h1 className='text-white mx-auto font-bold text-[25px]'>No Result Found</h1>
+          )}
       </ul>
     </div>
   )
