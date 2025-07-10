@@ -7,7 +7,7 @@ import { faArrowDownShortWide, faArrowUpAZ, faArrowUpShortWide, faTrash, faThumb
 import FormModal from '../common/FormModal'
 import TextEditor from '../common/TextEditor'
 import AllFolders from './SideBarList'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import useFetch from '../hooks/UseFetch'
 import { URL } from '../Api/settings'
 import UseValidator from '../hooks/UseValidator'
@@ -18,6 +18,7 @@ const AllNotes: React.FC = () => {
 
   const { id } = useParams()
   const { axiosFunction } = useFetch()
+  const navigate = useNavigate()
   const [noteFilter, setNoteFilter] = useState({ page: 1, category: '', sort: 'newtoold', limit: 10 })
 
   useEffect(() => {
@@ -333,15 +334,16 @@ console.log(typeof(data.noteId),data.isArchived);
 
   return (
     <div>
-
+{id&&<div className='text-[white] flex justify-end m-[30px] text-[15px] cursor-pointer ' onClick={() => { navigate(-1) }}>{'< back to folders'}</div>}
       <div className='flex flex-wrap justify-between m-[25px] relative'>
+
         <AllFolders />
         {/* <FontAwesomeIcon icon={faFileCirclePlus} style={{height:'40px',width:'40px'}} className={`${show?'text-[#cdca00]':'text-[#878787]'} mt-[20px] cursor-pointer`} onClick={()=>setShow(true)}/> */}
         <div className='flex gap-[80px] max-sm:gap-[10px] flex-wrap relative'>
           <span className='flex gap-1'>
             <input
               type="text"
-              className='border-[2px] border-white text-white h-[35px] sm:w-[500px] w-[200px] rounded mt-[25px]'
+              className='border-[2px] border-white text-white h-[35px] sm:w-[500px] w-[200px] rounded mt-[25px] p-[0_10px]'
               value={searchValue}
               onChange={onclickSearch}
             />
@@ -437,7 +439,7 @@ console.log(typeof(data.noteId),data.isArchived);
 
       {/* <h3 className='text-center text-white font-sans font-weight-[4vh] m-[2.5vh] text-[4vh]'>Folders</h3> */}
 
-      <ul id='notes' ref={containerRef} onScroll={handleScroll} className='max-h-[80vh] overflow-y-auto max-sm:justify-center p-1 overflow-y-scroll hide-scrollbar'>
+      <ul id='notes' ref={containerRef} onScroll={handleScroll} className='max-h-[100vh] overflow-y-auto max-sm:justify-center p-1 overflow-y-scroll hide-scrollbar'>
         {notesList.length > 0 ? notesList?.map((data, id) => {
           return (<li key={id} className='shadow-[0px_0px_10px_2px_#989898] p-[25px] rounded-[10px] my-[10px] w-[201px] hover:scale-[1.02]'>
             <div className="shadow rounded flex ">

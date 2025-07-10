@@ -257,7 +257,7 @@ export const searchNotes: any = async (req: Request, res: Response) => {
             folderId,
             userId: decode.userId,
             isDeleted:false
-        }).select('name noteId updatedAt -_id')
+        }).select('name noteId updatedAt isPinned isArchived -_id')
 
         console.log(notes);
 

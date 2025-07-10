@@ -335,7 +335,7 @@ return  (isFilter&&<button value={data} onClick={(e)=>onClickFilter(e)} classNam
       id='folders'
       ref={containerRef}
       onScroll={handleScroll}
-      className='max-h-[80vh] overflow-y-auto max-sm:justify-center p-1 overflow-y-scroll hide-scrollbar'
+      className='max-h-[100vh] overflow-y-auto max-sm:justify-center p-1 overflow-y-scroll hide-scrollbar'
     >
   {folderList && folderList.length > 0 ? (
     folderList.map((data, id) => (
