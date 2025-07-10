@@ -32,6 +32,7 @@ const Folder: React.FC = () => {
   const [hasMore, setHasMore] = useState(true)
   const [deleteShow, setDeleteShow] = useState(false)
   const containerRef = useRef<HTMLUListElement>(null);
+  const[initialLoading,setInitialLoading]=useState(true)
 
   const navigate = useNavigate()
 
@@ -192,6 +193,7 @@ const Folder: React.FC = () => {
           folderId: data.folderId
         }))
         setIsSearchLoading(false)
+        setInitialLoading(false)
         if (folderFilter.page > 1) {
           setFolderList(prev => [...prev, ...folder])
         } else {
@@ -208,6 +210,7 @@ const Folder: React.FC = () => {
           })
       }).catch(() => {
         setIsSearchLoading(false)
+        setInitialLoading(false)
       })
   }
 
@@ -350,7 +353,7 @@ const Folder: React.FC = () => {
         onScroll={handleScroll}
         className='max-h-[80vh] overflow-y-auto max-sm:justify-center p-1 overflow-y-scroll hide-scrollbar'
       >
-        {isSearchLoading ?
+        {isSearchLoading || initialLoading ?
           <div className="flex justify-center items-center p-10 w-full text-[]">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>

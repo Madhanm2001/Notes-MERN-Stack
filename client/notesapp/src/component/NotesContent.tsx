@@ -19,6 +19,7 @@ const NotesContent = () => {
   const { axiosFunction } = useFetch()
   const [show, setShow] = useState(false)
   const [isSearchLoading, setIsSearchLoading] = useState(false)
+  const[initialLoading,setInitialLoading]=useState(true)
   const [notesDetail, setNotesDetail] = useState({ name: '', content: '', date: '', time: '', isArchived: false, isPinned: false, noteId: id })
   const [notesContent, setNotesContent] = useState({ name: '', content: '', date: '', time: '', isArchived: false, isPinned: false, noteId: id })
   const [noteErr, setNoteErr] = useState({ name: '', content: '' })
@@ -126,7 +127,7 @@ const NotesContent = () => {
 
     axiosFunction("get", URL.Note.get, id, "", "").then((res) => {
         setIsSearchLoading(false)
-
+setInitialLoading(false)
       setNotesContent({ name: res.name, content: res.content, date: TimeFormat(res.updatedAt).date, time: TimeFormat(res.updatedAt).time, isArchived: res.isArchived, isPinned: res.isPinned, noteId: id })
     })
   }
@@ -201,8 +202,8 @@ const NotesContent = () => {
         <div className='text-[white] mt-[30px] text-[15px] cursor-pointer' onClick={() => { navigate(-1) }}>{'< back to notes'}</div>
       </div>
 
-      {isSearchLoading ?
-          <div className="flex justify-center items-center p-10 w-full text-[]">
+      {isSearchLoading || initialLoading?
+          <div className="flex justify-center items-center p-10 w-full">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
           : <div className='flex flex-col justify-center items-center h-screen'>

@@ -19,6 +19,7 @@ const AllNotes: React.FC = () => {
   const { id } = useParams()
   const { axiosFunction } = useFetch()
   const navigate = useNavigate()
+  const[initalLoading,setInitalLoading]=useState(true)
   const [noteFilter, setNoteFilter] = useState({ page: 1, category: 'all', sort: 'newtoold', limit: 10 })
 
   useEffect(() => {
@@ -176,6 +177,7 @@ setIsSearchLoading(true)
           isArchived: data.isArchived
         }))
         setIsSearchLoading(false)
+        setInitalLoading(false)
         if (noteFilter.page > 1) {
           setNotesList(prev => [...prev, ...note])
         } else {
@@ -203,6 +205,7 @@ setIsSearchLoading(true)
           isArchived: data.isArchived
         }))
         setIsSearchLoading(false)
+        setInitalLoading(false)
         if (noteFilter.page > 1) {
           setNotesList(prev => [...prev, ...note])
         } else {
@@ -214,6 +217,7 @@ setIsSearchLoading(true)
       })
       .catch(()=>{
         setIsSearchLoading(false)
+        setInitalLoading(false)
       })
     }
 
@@ -464,7 +468,7 @@ setIsSearchLoading(true)
       {/* <h3 className='text-center text-white font-sans font-weight-[4vh] m-[2.5vh] text-[4vh]'>Folders</h3> */}
 
       <ul id='notes' ref={containerRef} onScroll={handleScroll} className='max-h-[100vh] overflow-y-auto max-sm:justify-center p-1 overflow-y-scroll hide-scrollbar'>
-        {isSearchLoading ?
+        {isSearchLoading || initalLoading?
           <div className="flex justify-center items-center p-10 w-full text-[]">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
