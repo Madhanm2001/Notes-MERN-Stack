@@ -118,7 +118,9 @@ const onClickSignIn = async () => {
                 <h2 className='text-[#c8c0c0] text-[20px]'>Sign-In</h2>
                 <div className='flex flex-col mt-[5vh]'>
                     <label htmlFor="" className='text-white font-semibold'>username or email:</label>
-                    <input type="text" name='usernameoremail' value={signInDetails.usernameoremail} onChange={handleChangeSignIn} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
+                    <input type="text" name='usernameoremail' value={signInDetails.usernameoremail} onKeyDown={(e) => {
+    if (e.key === 'Enter') onClickSignIn()
+  }} onChange={handleChangeSignIn} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
                     <div className='text-[red] text-[12px]'>{signInError.usernameoremail}</div>
                 </div>
                 <div className='flex flex-col mt-[5vh]'>
@@ -137,22 +139,30 @@ const onClickSignIn = async () => {
                     <h2 className='text-[#c8c0c0] text-[20px]'>Sign-up</h2>
                     <div className='flex flex-col mt-[5vh]'>
                         <label htmlFor="" className='text-white font-semibold'>name:</label>
-                        <input type="text" name='name' onChange={handleChangeSignUp} value={signUpDetails.name} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
+                        <input type="text" name='name' onChange={handleChangeSignUp} onKeyDown={(e) => {
+    if (e.key === 'Enter') onClickSignUp()
+  }} value={signUpDetails.name} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
                         <div className='text-[red] text-[12px]'>{signUpError.name}</div>
                     </div>
                     <div className='flex flex-col mt-[5vh]'>
                         <label htmlFor="" className='text-white font-semibold'>username:</label>
-                        <input type="text" name='username' onChange={handleChangeSignUp} value={signUpDetails.username} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
+                        <input type="text" name='username' onChange={handleChangeSignUp} onKeyDown={(e) => {
+    if (e.key === 'Enter') onClickSignUp()
+  }} value={signUpDetails.username} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
                         <div className='text-[red] text-[12px]'>{signUpError.username}</div>
                     </div>
                     <div className='flex flex-col mt-[5vh]'>
                         <label htmlFor="" className='text-white font-semibold'>email:</label>
-                        <input type="text" name='email' onChange={handleChangeSignUp} value={signUpDetails.email} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
+                        <input type="text" name='email' onChange={handleChangeSignUp} onKeyDown={(e) => {
+    if (e.key === 'Enter') onClickSignUp()
+  }} value={signUpDetails.email} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
                         <div className='text-[red] text-[12px]'>{signUpError.email}</div>
                     </div>
                     <div className='flex flex-col mt-[5vh]'>
                         <label htmlFor="" className='text-white font-semibold'>phoneno:</label>
-                        <input type="text" name='phoneNumber' onChange={handleChangeSignUp} value={signUpDetails.phoneNumber} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
+                        <input type="text" name='phoneNumber' onChange={handleChangeSignUp} onKeyDown={(e) => {
+    if (e.key === 'Enter') onClickSignUp()
+  }} value={signUpDetails.phoneNumber} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
                         <div className='text-[red] text-[12px]'>{signUpError.phoneNumber}</div>
                     </div>
                     <div className='flex flex-col mt-[5vh]'>
@@ -164,7 +174,9 @@ const onClickSignIn = async () => {
                     </div>
                     <div className='flex flex-col mt-[5vh]'>
                         <label htmlFor="" className='text-white font-semibold'>confirm password:</label>
-                        <input type="password" name='confirmPassword' onChange={handleChangeSignUp} value={signUpDetails.confirmPassword} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
+                        <input type="password" name='confirmPassword' onChange={handleChangeSignUp} onKeyDown={(e) => {
+    if (e.key === 'Enter') onClickSignUp()
+  }} value={signUpDetails.confirmPassword} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
                         <div className='text-[red] text-[12px]'>{signUpError.confirmPassword}</div>
                     </div>
                     <button className='bg-[#0052d9] text-white rounded border-none w-full mt-[5vh] py-[5px] cursor-pointer' value={'signup'} onClick={onClickSignUp}>submit</button>
