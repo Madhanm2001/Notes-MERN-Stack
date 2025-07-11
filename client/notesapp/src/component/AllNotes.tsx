@@ -20,6 +20,7 @@ const AllNotes: React.FC = () => {
   const { axiosFunction } = useFetch()
   const navigate = useNavigate()
   const[initalLoading,setInitalLoading]=useState(true)
+  const[load,setLoad]=useState(false)
   const [noteFilter, setNoteFilter] = useState({ page: 1, category: 'all', sort: 'newtoold', limit: 10 })
 
   useEffect(() => {
@@ -29,7 +30,9 @@ const AllNotes: React.FC = () => {
   }
     // setIsSearchLoading(true)
     console.log(id);
+    if(!load){
     fetchNotes()
+    }
   }, [noteFilter])
 
   const [notesList, setNotesList] = useState([{ name: '', noteId: '', date: '', time: Date(), isPinned: false, isArchived: false }])
@@ -178,6 +181,7 @@ setIsSearchLoading(true)
         }))
         setIsSearchLoading(false)
         setInitalLoading(false)
+        setLoad(false)
         if (noteFilter.page > 1) {
           setNotesList(prev => [...prev, ...note])
         } else {
@@ -206,6 +210,8 @@ setIsSearchLoading(true)
         }))
         setIsSearchLoading(false)
         setInitalLoading(false)
+        setLoad(false)
+
         if (noteFilter.page > 1) {
           setNotesList(prev => [...prev, ...note])
         } else {
@@ -218,6 +224,8 @@ setIsSearchLoading(true)
       .catch(()=>{
         setIsSearchLoading(false)
         setInitalLoading(false)
+        setLoad(false)
+
       })
     }
 
@@ -269,7 +277,7 @@ setIsSearchLoading(true)
   }
 
   const onclickSearch = (e: any) => {
-    setIsSearchLoading(e.target.value ? true : false)
+    setLoad(e.target.value ? true : false)
     const value = e.target.value;
     setSearchValue(value);
     setIsFilter(false)
@@ -292,7 +300,7 @@ setIsSearchLoading(true)
               isPinned: data.isPinned,
             }))
             setNotesList(notes);
-            setIsSearchLoading(false)
+            setLoad(false)
           })
       }
     }, 200)
@@ -363,7 +371,8 @@ setIsSearchLoading(true)
 
   return (
     <div>
-      {id && <div className='text-[white] flex justify-end m-[30px] text-[15px] cursor-pointer ' onClick={() => { navigate(-1) }}>{'< back to folders'}</div>}
+      {id && 
+      <div className='text-[white] flex justify-end m-[30px] text-[15px] cursor-pointer ' onClick={() => { navigate(-1) }}>{'< back to folders'}</div>}
       <div className='flex flex-wrap justify-between m-[25px] relative'>
 
         <AllFolders />
@@ -468,7 +477,7 @@ setIsSearchLoading(true)
       {/* <h3 className='text-center text-white font-sans font-weight-[4vh] m-[2.5vh] text-[4vh]'>Folders</h3> */}
 
       <ul id='notes' ref={containerRef} onScroll={handleScroll} className='max-h-[100vh] overflow-y-auto max-sm:justify-center p-1 overflow-y-scroll hide-scrollbar'>
-        {isSearchLoading || initalLoading?
+        {isSearchLoading || load || initalLoading ?
           <div className="flex justify-center items-center p-10 w-full text-[]">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
@@ -493,7 +502,7 @@ setIsSearchLoading(true)
               <p className='text-[#878787] text-[13px] flex justify-center gap-[10px] '><span><FontAwesomeIcon className='text-[#878787]' icon={faClock} /></span>{`${data?.date}, ${data?.time}`}</p>
             </li>)
           }) : (
-            <h1 className='text-white mx-auto font-bold text-[25px]'>No Result Found</h1>
+            <h1 className='text-white mx-auto font-bold text-[25px]'>No More Note :(</h1>
           )}
       </ul>
     </div>

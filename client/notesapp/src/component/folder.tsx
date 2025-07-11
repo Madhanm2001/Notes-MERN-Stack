@@ -23,7 +23,7 @@ const Folder: React.FC = () => {
   const [folderErr, setFolderErr] = useState({ name: '', category: '' })
   const [folderId, setFolderId] = useState('')
   const [isSearchLoading, setIsSearchLoading] = useState(false)
-
+  const [load, setLoad] = useState(false)
   const { folderValidator } = UseValidator()
   const [isFilter, setIsFilter] = useState(false)
   const [isSort, setIsSort] = useState(false)
@@ -194,6 +194,7 @@ const Folder: React.FC = () => {
         }))
         setIsSearchLoading(false)
         setInitialLoading(false)
+        setLoad(false)
         if (folderFilter.page > 1) {
           setFolderList(prev => [...prev, ...folder])
         } else {
@@ -211,6 +212,8 @@ const Folder: React.FC = () => {
       }).catch(() => {
         setIsSearchLoading(false)
         setInitialLoading(false)
+        setLoad(false)
+
       })
   }
 
@@ -226,7 +229,7 @@ const Folder: React.FC = () => {
       sort: 'newtoold'
     }))
     setIsSort(false)
-    setIsSearchLoading(e.target.value ? true : false)
+    setLoad(e.target.value ? true : false)
     setTimeout(() => {
       if (value.trim()) {
         axiosFunction("get", URL.Folder.search, '', { name: value }, "")
@@ -238,7 +241,7 @@ const Folder: React.FC = () => {
               folderId: data.folderId
             }))
             setFolderList(folder);
-            setIsSearchLoading(false)
+            setLoad(false)
           })
       }
     }, 200)
@@ -353,7 +356,7 @@ const Folder: React.FC = () => {
         onScroll={handleScroll}
         className='max-h-[80vh] overflow-y-auto max-sm:justify-center p-1 overflow-y-scroll hide-scrollbar'
       >
-        {isSearchLoading || initialLoading ?
+        {isSearchLoading || load || initialLoading ?
           <div className="flex justify-center items-center p-10 w-full text-[]">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
@@ -376,7 +379,7 @@ const Folder: React.FC = () => {
               </li>
             ))
           ) : (
-            <h1 className='text-white mx-auto font-bold text-[25px]'>No Result Found</h1>
+            <h1 className='text-white mx-auto font-bold text-[25px]'>No More Folder :(</h1>
           )}
       </ul>
 
