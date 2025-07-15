@@ -109,7 +109,6 @@ export const getNote: any = async (req: Request, res: Response) => {
 
 export const getAllNotes = async (req: Request, res: Response): Promise<void | any | undefined> => {
 
-    console.log("jhdfjshjfhsjfhsjf","jhsjdhsd")
     const { filter, sort, page, limit } = req.query;
     const decode = (req as any).user;
 

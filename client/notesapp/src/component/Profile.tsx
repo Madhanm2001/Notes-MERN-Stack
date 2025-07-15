@@ -62,10 +62,9 @@ const { data: profileData, isLoading, isError } = useQuery({
 
 const error = ChangePasswordValidator(changePassDetail) || {}
 setChangePassErr(error)
-setIsSearchLoading(true)
 
 if(Object.keys(error).length==0){
-
+setIsSearchLoading(true)
    axiosFunction('patch', URL.Profile.changePassword, '', '', changePassDetail)
     .then(()=>{
     toast.info('password is changed')
@@ -87,10 +86,10 @@ setChangePassErr(ps=>({...ps,invalid:err.response.data}))
 
 const error = profileValidator(profileDetail) || {}
 setProfileErr(error)
-setIsSearchLoading(true)
+
 
 if(Object.keys(error).length==0){
-
+setIsSearchLoading(true)
    axiosFunction('patch', URL.Profile.update, '', '', profileDetail)
     .then(()=>{
       toast.info('profile is edited')

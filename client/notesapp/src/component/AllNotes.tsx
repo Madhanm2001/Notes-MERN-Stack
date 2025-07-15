@@ -67,11 +67,11 @@ const AllNotes: React.FC = () => {
     }
   }
   const onSubmitNote = () => {
-    setIsSearchLoading(true)
     const error = noteValidator(notesDetail) || {}
     const params = notesId || "";
     setNoteErr(error)
     if (Object.keys(error).length === 0) {
+    setIsSearchLoading(true)
       axiosFunction('put', notesId ? URL.Note.update : URL.Note.create, params || id, '', notesDetail)
         .then(() => {
           setNoteFilter(ps => ({ ...ps, page: 1 }));
