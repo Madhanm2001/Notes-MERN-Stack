@@ -11,6 +11,7 @@ import { URL } from '../Api/settings'
 import useFetch from '../hooks/UseFetch'
 import SideBarList from './SideBarList'
 import { toast } from 'react-toastify';
+import useLocalStorage from '../hooks/UseLocalStorage';
 
 const Folder: React.FC = () => {
 
@@ -33,17 +34,22 @@ const Folder: React.FC = () => {
   const [deleteShow, setDeleteShow] = useState(false)
   const containerRef = useRef<HTMLUListElement>(null);
   const[initialLoading,setInitialLoading]=useState(true)
+  const{getItem}=useLocalStorage()
+  const debounceRef = useRef<any>(null);
+    
+
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    const token = localStorage.getItem('NotesToken')
-    // setIsSearchLoading(true)
+    const token = getItem('NotesToken')
     if (!token) {
       navigate('/auth')
     }
-
+if(!load){
     fetchFolders();
+
+}
 
   }, [folderFilter])
 
@@ -53,6 +59,7 @@ const Folder: React.FC = () => {
     const params = folderId || "";
     setFolderErr(error)
     if (Object.keys(error).length === 0) {
+        setIsSearchLoading(true)
       axiosFunction(params ? 'put' : "post", URL.Folder.create, params, '', folderDetail)
         .then(() => {
           if (folderId) {
@@ -194,6 +201,7 @@ const Folder: React.FC = () => {
         }))
         setIsSearchLoading(false)
         setInitialLoading(false)
+        setSearchValue('')
         setLoad(false)
         if (folderFilter.page > 1) {
           setFolderList(prev => [...prev, ...folder])
@@ -213,7 +221,6 @@ const Folder: React.FC = () => {
         setIsSearchLoading(false)
         setInitialLoading(false)
         setLoad(false)
-
       })
   }
 
@@ -221,17 +228,24 @@ const Folder: React.FC = () => {
 
   const onclickSearch = (e: any) => {
     const value = e.target.value;
+    setLoad(value.trim().length>=3 ? true : false)
     setSearchValue(value);
     setIsFilter(false)
-    setFolderFilter(ps => ({
+    if(value.trim().length>=3){
+
+      setFolderFilter(ps => ({
       ...ps,
       category: '',
       sort: 'newtoold'
     }))
+      
+    }
     setIsSort(false)
-    setLoad(e.target.value ? true : false)
-    setTimeout(() => {
-      if (value.trim()) {
+    if(debounceRef.current){
+      clearTimeout(debounceRef.current)
+    }
+    debounceRef.current=setTimeout(() => {
+      if (value.trim().length>=3) {
         axiosFunction("get", URL.Folder.search, '', { name: value }, "")
           .then((res) => {
             const folder = res?.map((data: any) => ({
@@ -244,7 +258,7 @@ const Folder: React.FC = () => {
             setLoad(false)
           })
       }
-    }, 200)
+    }, 300)
     setHasMore(true)
     if (containerRef.current) {
       containerRef.current.scrollTop = 0;
@@ -255,7 +269,7 @@ const Folder: React.FC = () => {
     if (!containerRef.current || !hasMore) return
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current
 
-    if (scrollTop + clientHeight >= scrollHeight - 5) {
+    if (scrollTop + clientHeight >= scrollHeight - 5 && !searchValue) {
       setFolderFilter(ps => ({ ...ps, page: ps.page + 1 }))
     }
   }

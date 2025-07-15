@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
   const navigate=useNavigate()
   const[isProfileOpen,setIsProfileOpen]=useState(false)
   const[activetab,setActivetab]=useState('home')
-  const{setItem,getItem,deleteItem}=useLocalStorage()
+  const{deleteItem}=useLocalStorage()
 
 
 const activeRef: any= useRef(null)

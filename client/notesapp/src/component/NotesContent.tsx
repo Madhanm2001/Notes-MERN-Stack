@@ -151,7 +151,10 @@ setInitialLoading(false)
 
   const handleShareClick = (link: any) => {
     navigator.clipboard.writeText(link)
-      .then(() => console.log("Copied:", link))
+      .then(() =>{
+        console.log("Copied:", link)
+        toast.info('note link is copied')
+      })
       .catch(err => console.error("Copy failed", err));
   }
 

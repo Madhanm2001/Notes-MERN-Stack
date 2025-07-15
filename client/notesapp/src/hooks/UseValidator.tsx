@@ -117,7 +117,7 @@ const UseValidator = () => {
       error.name = "invalid title format";
     }
     
-    if (!pattern.FOLDER_CATEGORY.test(state.category)) {
+    if (state.category && !pattern.FOLDER_CATEGORY.test(state.category)) {
       error.category = "invalid category format";
     }
     console.log(error)

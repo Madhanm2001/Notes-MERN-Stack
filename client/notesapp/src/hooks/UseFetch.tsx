@@ -56,7 +56,7 @@ const useFetch = () => {
       setData(response.data);
       return response.data
     } catch (err: any) {
-      setError(err.message || 'Something went wrong');
+      throw err
     } finally {
       setLoading(false);
     }

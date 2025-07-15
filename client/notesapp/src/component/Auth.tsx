@@ -15,15 +15,14 @@ const Auth = () => {
     const [signInError, setSignInError] = useState({ usernameoremail: '', password: '' ,invalid:''})
     const [signUpDetails, setSignUpDetails] = useState({ username: '', password: '', confirmPassword: '', phoneNumber: '', email: '', name: '' })
     const { signInValidator, signUpValidator } = UseValidator()
-    const [signUpError,setSignUpError]=useState({ username: '', password: '', confirmPassword: '', phoneNumber: '', email: '', name: '' })
+    const [signUpError,setSignUpError]=useState({ username: '', password: '', confirmPassword: '', phoneNumber: '', email: '', name: '',invalid:'' })
     const{axiosFunction} =useFetch()
-    const{setItem,getItem,deleteItem}=useLocalStorage()
+    const{setItem,getItem}=useLocalStorage()
 
     useEffect(()=>{
-        if(localStorage.getItem('NotesToken')){
+        if(getItem('NotesToken')){
             navigate('/')
         }
-
     },[])
 
 
@@ -38,14 +37,20 @@ if (error && Object.keys(error).length > 0) {
 } else {
     axiosFunction("post",URL.Auth.signUp,'','',signUpDetails).then((res)=>{
         toast.success('account is created successfully')
+        setTimeout(()=>{
+     window.location.reload()
+  },500)
    
     console.log(res)
     
-  }) 
+  }).catch((err)=>{
+    console.log("err",err.response.data.message);
+    toast.error(err.response.data.message)
+    setSignUpError(ps=>({...ps,invalid:err.response.data.message}))
+    
+  })
 
-  setTimeout(()=>{
-     window.location.reload()
-  },500)
+  
   console.log("No errors")
 }
     }
@@ -76,9 +81,12 @@ const onClickSignIn = async () => {
         }
         
       })
-      .catch(err => {
-        console.log("API error:", err.response?.data?.message);
-      });
+      .catch((err)=>{
+    console.log("err",err.response.data.message);
+    toast.error(err.response.data.message)
+    setSignInError(ps=>({...ps,invalid:err.response.data.message}))
+    
+  })
   }
 }
 
@@ -179,8 +187,9 @@ const onClickSignIn = async () => {
   }} value={signUpDetails.confirmPassword} className='border-[1px] rounded text-white px-[15px] py-[1%]' />
                         <div className='text-[red] text-[12px]'>{signUpError.confirmPassword}</div>
                     </div>
+                    <div className='text-[red] text-[12px] text-center'>{signUpError.invalid}</div>
                     <button className='bg-[#0052d9] text-white rounded border-none w-full mt-[5vh] py-[5px] cursor-pointer' value={'signup'} onClick={onClickSignUp}>submit</button>
-                    <div className='text-center text-white rounded text-small mt-[7%] cursor-pointer' onClick={() => { setIsSignUp(false),setSignUpError({username: '', password: '', confirmPassword: '', phoneNumber: '', email: '', name: ''}),setSignUpDetails({username: '', password: '', confirmPassword: '', phoneNumber: '', email: '', name: ''}) }}>sign-in</div>
+                    <div className='text-center text-white rounded text-small mt-[7%] cursor-pointer' onClick={() => { setIsSignUp(false),setSignUpError({username: '', password: '', confirmPassword: '', phoneNumber: '', email: '', name: '',invalid:''}),setSignUpDetails({username: '', password: '', confirmPassword: '', phoneNumber: '', email: '', name: ''}) }}>sign-in</div>
                 </section>}
 
         </div>

@@ -10,10 +10,10 @@ import { toast } from 'react-toastify'
 const Profile = () => {
   const [showProfile, setShowProfile] = useState(false)
   const [showChangePass, setChangePass] = useState(false)
-    const [isSearchLoading, setIsSearchLoading] = useState(false)
+  const [isSearchLoading, setIsSearchLoading] = useState(false)
   const [profileDetail,setProfileDetail]=useState({name:'',username:'',phoneNumber:'',email:''})
   const{ axiosFunction } = useFetch()
-  const[profileErr,setProfileErr]=useState({name:'',username:'',phoneNumber:'',email:''})
+  const[profileErr,setProfileErr]=useState({name:'',username:'',phoneNumber:'',email:'',invalid:''})
   const[changePassErr,setChangePassErr]=useState({oldPassword:'',newPassword:'',invalid:''})
   const[changePassDetail,setChangePassDetail]=useState({oldPassword:'',newPassword:''})
   const{profileValidator,ChangePasswordValidator}=UseValidator()
@@ -26,7 +26,7 @@ const { data: profileData, isLoading, isError } = useQuery({
   console.log(profileDetail);
 
   const getProfile=()=>{
-    setProfileErr({name:'',username:'',phoneNumber:'',email:''})
+    setProfileErr({name:'',username:'',phoneNumber:'',email:'',invalid:''})
 
     axiosFunction('get', URL.Profile.get, '', '', '').then((res)=>{
       setProfileDetail(res.profile)
@@ -67,21 +67,16 @@ setIsSearchLoading(true)
 if(Object.keys(error).length==0){
 
    axiosFunction('patch', URL.Profile.changePassword, '', '', changePassDetail)
-    .then((res)=>{
-      if(res!='password is changed successfully'){
-
-        setChangePassErr(ps=>({
-          ...ps,
-          invalid:'enter valid old password'
-        }))       
-
-      }
-      else{
-        toast.info('password is changed')
+    .then(()=>{
+    toast.info('password is changed')
 setChangePass(false)
-setIsSearchLoading(false)
-      }
-      
+    setIsSearchLoading(false)
+
+    })
+    .catch((err)=>{
+setChangePassErr(ps=>({...ps,invalid:err.response.data}))
+    toast.error(err.response.data)
+    setIsSearchLoading(false)
     })
 
 }
@@ -102,6 +97,12 @@ if(Object.keys(error).length==0){
       setShowProfile(false)
       setIsSearchLoading(false)
     })
+    .catch((err)=>{
+        console.log("err",err.response.data.message);
+        toast.error('User with the same email or usernme already exists.')
+        setProfileErr(ps=>({...ps,invalid:'User with the same email or usernme already exists.' }))
+        setIsSearchLoading(false)
+      })
 
 }
   }
@@ -139,6 +140,8 @@ if(Object.keys(error).length==0){
             <input type="text" name='phoneNumber' className='layoutInput' onChange={profileOnChange} value={profileDetail.phoneNumber}/>
             <div className='text-[red] text-[12px]'>{profileErr.phoneNumber}</div>
           </div>
+          <div className='text-[red] text-[12px] text-center'>{profileErr.invalid}</div>
+
         </>}
         footer={
           <>

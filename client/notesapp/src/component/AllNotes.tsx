@@ -28,7 +28,6 @@ const AllNotes: React.FC = () => {
   if (!token) {
     navigate('/auth')
   }
-    // setIsSearchLoading(true)
     console.log(id);
     if(!load){
     fetchNotes()
@@ -49,6 +48,7 @@ const AllNotes: React.FC = () => {
   const [hasMore, setHasMore] = useState(true)
   const containerRef = useRef<HTMLUListElement>(null);
   const [searchValue, setSearchValue] = useState('')
+  const debounceRef = useRef<any>(null);
 
   console.log(notesList);
 
@@ -67,6 +67,7 @@ const AllNotes: React.FC = () => {
     }
   }
   const onSubmitNote = () => {
+    setIsSearchLoading(true)
     const error = noteValidator(notesDetail) || {}
     const params = notesId || "";
     setNoteErr(error)
@@ -181,6 +182,7 @@ setIsSearchLoading(true)
         }))
         setIsSearchLoading(false)
         setInitalLoading(false)
+        setSearchValue('');
         setLoad(false)
         if (noteFilter.page > 1) {
           setNotesList(prev => [...prev, ...note])
@@ -211,6 +213,7 @@ setIsSearchLoading(true)
         setIsSearchLoading(false)
         setInitalLoading(false)
         setLoad(false)
+        setSearchValue('')
 
         if (noteFilter.page > 1) {
           setNotesList(prev => [...prev, ...note])
@@ -276,47 +279,53 @@ setIsSearchLoading(true)
     setHasMore(true);
   }
 
-  const onclickSearch = (e: any) => {
-    setLoad(e.target.value ? true : false)
-    const value = e.target.value;
-    setSearchValue(value);
-    setIsFilter(false)
-    setNoteFilter(ps => ({
-      ...ps,
-      category: 'all',
-      sort: 'newtoold'
-    }))
-    setIsSort(false)
-    setTimeout(() => {
-      if (value.trim()) {
-        axiosFunction("get", id ? URL.Note.searchByFolder : URL.Note.searchAll, id, { name: value }, "")
-          .then((res) => {
-            const notes = res?.map((data: any) => ({
-              name: data.name,
-              date: TimeFormat(data.updatedAt).date,
-              time: TimeFormat(data.updatedAt).time,
-              noteId: data.noteId,
-              isArchived: data.isArchived,
-              isPinned: data.isPinned,
-            }))
-            setNotesList(notes);
-            setLoad(false)
-          })
-      }
-    }, 200)
-    setHasMore(true)
-    if (containerRef.current) {
-      containerRef.current.scrollTop = 0;
-    }
+const onclickSearch = (e: any) => {  
+  const value = e.target.value;
+  setLoad(value.trim().length>=3 ? true : false)
+  setSearchValue(value);
+  setIsFilter(false)
+  if(value.trim().length>=3){
+setNoteFilter(ps => ({
+    ...ps,
+    category: 'all',
+    sort: 'newtoold'
+  }))
   }
+  
+  setIsSort(false)
+  if (debounceRef.current) {
+    clearTimeout(debounceRef.current)
+  }
+  debounceRef.current = setTimeout(() => {
+    if (value.trim().length>=3) {
+      axiosFunction("get", id ? URL.Note.searchByFolder : URL.Note.searchAll, id, { name: value }, "")
+        .then((res) => {
+          const notes = res?.map((data: any) => ({
+            name: data.name,
+            date: TimeFormat(data.updatedAt).date,
+            time: TimeFormat(data.updatedAt).time,
+            noteId: data.noteId,
+            isArchived: data.isArchived,
+            isPinned: data.isPinned,
+          }))
+          setNotesList(notes);
+          setLoad(false)
+        })
+    }
+  }, 300);
 
-  console.log(notesDetail);
+  setHasMore(true)
+  if (containerRef.current) {
+    containerRef.current.scrollTop = 0;
+  }
+}
+
+
+  console.log(searchValue,"searchValue");
 
   const onclickDelete = (data: any) => {
-
     setNotesId(data.noteId)
     setDeleteShow(true)
-
   };
 
 
@@ -363,10 +372,10 @@ setIsSearchLoading(true)
   const handleScroll = () => {
     if (!containerRef.current || !hasMore) return
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current
-
-    if (scrollTop + clientHeight >= scrollHeight - 5) {
+    if (scrollTop + clientHeight >= scrollHeight - 5 && !searchValue) {
       setNoteFilter(ps => ({ ...ps, page: ps.page + 1 }))
-    }
+}
+
   }
 
   return (

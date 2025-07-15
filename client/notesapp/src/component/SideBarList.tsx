@@ -5,6 +5,7 @@ import searchLogo from '../images/searchLogo.png'
 import { URL } from '../Api/settings';
 import useFetch from '../hooks/UseFetch';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import useLocalStorage from '../hooks/UseLocalStorage';
 
 const SideBarList = () => {
   const { id: Ids }: any = useParams()
@@ -17,6 +18,10 @@ const SideBarList = () => {
   const [pageNo, setPageNo] = useState(1)
   const [searchValue, setSearchValue] = useState('')
   const { axiosFunction } = useFetch()
+  const{getItem}=useLocalStorage()
+  const debounceRef = useRef<any>(null);
+
+
 
   console.log(fileList);
 
@@ -24,7 +29,7 @@ const SideBarList = () => {
 
   useEffect(() => {
 
-    const token = localStorage.getItem('NotesToken')
+    const token = getItem('NotesToken')
     if (!token) {
       navigate('/auth')
     }
@@ -92,9 +97,12 @@ const SideBarList = () => {
     const value = e.target.value;
     setSearchValue(value);
 
-    setTimeout(() => {
-      if (value.trim()) {
+    if(debounceRef.current){
+      clearTimeout(debounceRef.current)
+    }
 
+    debounceRef.current=setTimeout(() => {
+      if (value.trim().length>=3) {
         if (window.location.pathname.includes('notes-content')) {
           axiosFunction("get", URL.Note.searchAll, '', { name: value }, "")
             .then((res) => {
@@ -116,7 +124,7 @@ const SideBarList = () => {
             })
         }
       }
-    }, 200)
+    }, 300)
 
   }
 

@@ -41,46 +41,6 @@ const NoteShare = () => {
 
 
   }
-
-  const onclickEdit = (data: any) => {
-    console.log(data);
-    setNotesId(data.noteId)
-    axiosFunction("get", URL.Note.get, id, "", "").then((res) => {
-      setNotesDetail({ name: res.name, content: res.content, isArchived: res.isArchived, isPinned: res.isPinned, noteId: res.noteId, date: TimeFormat(res.updatedAt).date, time: TimeFormat(res.updatedAt).time })
-      setShow(true)
-    })
-
-  }
-
-  const onclickDelete = () => {
-    axiosFunction("delete", URL.Note.delete, id, "", "")
-      .then(() => {
-        navigate(-1)
-      });
-  };
-
-  const onTooglePinned = (data: any) => {
-    console.log(data.isPinned, 'Pinned');
-
-    if (data.isPinned) {
-      axiosFunction('put', URL.Note.unpinned, id, '', { isPinned: true })
-    }
-    else {
-      axiosFunction('put', URL.Note.pinned, id, '', { isPinned: false })
-    }
-    fetchNotes()
-  }
-  const onToogleArchived = (data: any) => {
-    console.log(data, 'Pinned');
-
-    if (data.isArchived) {
-      axiosFunction('put', URL.Note.unarchived, id, '', { isArchived: false });
-    } else {
-      axiosFunction('put', URL.Note.archived, id, '', { isArchived: true });
-    }
-    fetchNotes()
-
-  }
   const onchangeNoteName = (e: any) => {
 
     const { name, value } = e.target
@@ -121,42 +81,8 @@ const NoteShare = () => {
     }
   }
 
-  const handleSortClick = (sortValue: any) => {
-    navigator.clipboard.writeText(sortValue)
-      .then(() => console.log("Copied:", sortValue))
-      .catch(err => console.error("Copy failed", err));
-  }
-
   return (
     <div >
-
-      <FormModal
-        show={show}
-        isclose={true}
-        isNotes={true}
-        onclose={() => setShow(false)}
-        onlayoutclose={() => setShow(false)}
-        cancel={() => setShow(false)}
-        header={'Create-Notes'}
-        content={<>
-          <div className='layoutField'>
-            <label htmlFor="" className='layoutLabel'>Title:</label>
-            <input type="text" name='name' value={notesDetail.name} onChange={onchangeNoteName} className='layoutInput' />
-            <div className='text-[red] text-[12px]'>{noteErr.name}</div>
-          </div>
-          <div className='layoutField'>
-            <label htmlFor="" className='layoutLabel'>Content:</label>
-            <div> <TextEditor content={notesDetail.content} onChange={onchangeNote} /></div>
-            <div className='text-[red] text-[12px]'>{noteErr.content}</div>
-          </div>
-        </>}
-        footer={
-          <>
-            <button className='button' onClick={onSubmitNote}>submit</button>
-            <button className='button' onClick={() => setShow(!show)}>cancel</button>
-          </>
-        }
-      />
       {/* <div className='m-[20px] flex gap-[10px] justify-between'>
         <AllFolders />
         <div className='text-[white] mt-[30px] text-[15px]' onClick={() => { navigate(-1) }}>{'< back to notes'}</div>
